@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#8B4513">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>LA DELICIA | Panadería Artesanal – Pan fresco y delicias horneadas</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+--primary: #8B4513;
+--primary-dark: #6B3410;
+--accent: #F5B400;
+--accent-light: #FFD966;
+--bg: #FFFBF5;
+--surface: #FDF5E6;
+--text: #2C1810;
+--dim: #6B5B4F;
+--muted: #9A8A7A;
+--border: #E8D9C5;
+--wa: #25D366;
+--safe-b: env(safe-area-inset-bottom, 0px);
+--header-h: 108px;
+--tab-h: 60px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+font-family: 'Inter', sans-serif;
+background: var(--bg);
+color: var(--text);
+padding-top: var(--header-h);
+padding-bottom: calc(var(--tab-h) + var(--safe-b));
+}
+body.product-open { padding-top: 56px; }
+body.desktop { padding-bottom: 0; padding-top: 0; }
+h1,h2,h3 {
+font-family: 'Oswald', sans-serif;
+text-transform: uppercase;
+letter-spacing: 1px;
+font-weight: 600;
+}
+h1 { font-weight: 700; }
+.app-header {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 2000;
+background: rgba(255,251,245,0.97);
+backdrop-filter: blur(16px);
+border-bottom: 1px solid var(--border);
+}
+.announcement {
+background: linear-gradient(90deg, var(--primary), var(--primary-dark), var(--primary));
+color: #fff;
+text-align: center;
+padding: 8px 12px;
+font-size: 0.6rem;
+letter-spacing: 2px;
+text-transform: uppercase;
+font-family: 'Oswald', sans-serif;
+}
+.header-inner { width: 100%; }
+.header-row {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 16px;
+}
+.header-row .logo-btn { flex-shrink: 0; }
+.header-row .search-sticky { flex: 1; min-width: 0; }
+.icon-btn {
+width: 42px; height: 42px;
+border: none;
+background: var(--surface);
+border-radius: 50%;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1rem;
+flex-shrink: 0;
+transition: background 0.2s;
+}
+.icon-btn:hover { background: var(--border); }
+.logo-btn {
+background: none;
+border: none;
+font-family: 'Oswald', sans-serif;
+font-size: 1.5rem;
+font-weight: 700;
+letter-spacing: 4px;
+cursor: pointer;
+flex-shrink: 0;
+color: var(--primary);
+}
+.search-sticky {
+flex: 1;
+display: flex;
+align-items: center;
+gap: 10px;
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: 100px;
+padding: 10px 16px;
+min-width: 0;
+}
+.search-sticky i { color: var(--muted); font-size: 0.85rem; }
+.search-sticky input {
+border: none;
+background: transparent;
+outline: none;
+width: 100%;
+font-size: 0.85rem;
+}
+.cart-btn { position: relative; }
+.cart-badge {
+position: absolute;
+top: 0; right: 0;
+background: var(--accent);
+color: #2C1810;
+font-size: 0.55rem;
+font-weight: 700;
+min-width: 17px;
+height: 17px;
+border-radius: 9px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 2px solid #fff;
+}
+.view { display: none; min-height: calc(100vh - var(--header-h) - var(--tab-h)); }
+.view.active { display: block; }
+body.product-open .view:not(#view-product) { display: none !important; }
+body.product-open #view-product { display: block !important; }
+.overlay {
+position: fixed; inset: 0;
+background: rgba(0,0,0,0.45);
+z-index: 2500;
+opacity: 0;
+visibility: hidden;
+transition: 0.3s;
+}
+.overlay.show { opacity: 1; visibility: visible; }
+.menu-sidebar {
+position: fixed;
+top: 0; left: -100%;
+width: min(320px, 88vw);
+height: 100%;
+height: 100dvh;
+background: #fff;
+z-index: 2600;
+transition: left 0.35s cubic-bezier(0.32,0.72,0,1);
+display: flex;
+flex-direction: column;
+box-shadow: 8px 0 32px rgba(0,0,0,0.1);
+}
+.menu-sidebar.open { left: 0; }
+.menu-head {
+padding: 20px;
+border-bottom: 1px solid var(--border);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.menu-head h2 { font-size: 1.2rem; }
+.menu-body { flex: 1; overflow-y: auto; padding: 8px 0 16px; }
+.menu-footer {
+flex-shrink: 0;
+padding: 16px 20px calc(16px + var(--safe-b));
+border-top: 1px solid var(--border);
+text-align: center;
+background: var(--surface);
+}
+.menu-footer a {
+font-size: 0.72rem;
+color: var(--muted);
+text-decoration: none;
+letter-spacing: 0.5px;
+transition: color 0.2s;
+}
+.menu-footer a:hover { color: var(--accent); }
+.menu-footer strong {
+color: var(--primary);
+font-weight: 700;
+letter-spacing: 1.5px;
+}
+.mobile-only { display: block; }
+.desktop-only { display: none; }
+.menu-label {
+padding: 16px 20px 8px;
+font-size: 0.65rem;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(--muted);
+font-family: 'Oswald', sans-serif;
+}
+.menu-link {
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 14px 20px;
+border: none;
+background: none;
+width: 100%;
+text-align: left;
+font-size: 0.9rem;
+cursor: pointer;
+color: var(--text);
+transition: background 0.15s;
+}
+.menu-link:hover, .menu-link:active { background: var(--surface); }
+.menu-link i { width: 20px; color: var(--primary); }
+.menu-promo {
+margin: 8px 16px;
+padding: 14px;
+background: linear-gradient(135deg, #8B4513, #A0522D);
+border-radius: 12px;
+color: #fff;
+cursor: pointer;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.menu-promo:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,69,19,0.3); }
+.menu-promo strong { display: block; font-size: 0.85rem; margin-bottom: 4px; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+.menu-promo span { font-size: 0.72rem; opacity: 0.85; }
+.hero-carousel {
+position: relative;
+overflow: hidden;
+aspect-ratio: 4/3;
+background: var(--surface);
+}
+.hero-slide {
+position: absolute;
+inset: 0;
+opacity: 0;
+transition: opacity 1s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+.hero-slide .hero-caption {
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+padding: 40px 20px 24px;
+background: linear-gradient(to top, rgba(44,24,16,0.85) 0%, rgba(44,24,16,0.4) 50%, transparent 100%);
+color: #fff;
+z-index: 2;
+text-align: center;
+}
+.hero-slide .hero-caption h2 {
+font-size: 1.8rem;
+letter-spacing: 3px;
+margin-bottom: 6px;
+text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+color: #fff;
+}
+.hero-slide .hero-caption p {
+font-size: 0.85rem;
+opacity: 0.95;
+letter-spacing: 1px;
+text-transform: uppercase;
+font-family: 'Oswald', sans-serif;
+color: var(--accent-light);
+}
+body.desktop .hero-slide {
+background-size: cover;
+background-position: center;
+}
+body.desktop .hero-slide::before {
+content: '';
+position: absolute;
+inset: 0;
+background-image: inherit;
+background-size: cover;
+background-position: center;
+filter: blur(50px) brightness(0.5) saturate(1.3);
+transform: scale(1.4);
+z-index: 0;
+}
+body.desktop .hero-slide::after {
+content: '';
+position: absolute;
+inset: 0;
+background: linear-gradient(165deg, rgba(139,69,19,0.55) 0%, rgba(44,24,16,0.6) 100%);
+z-index: 0;
+}
+body.desktop .hero-slide img {
+position: relative;
+z-index: 1;
+object-fit: contain;
+box-sizing: border-box;
+padding: 26px;
+filter: drop-shadow(0 22px 34px rgba(0,0,0,0.5));
+opacity: 0;
+transform: scale(0.94);
+transition: opacity 0.8s ease 0.15s, transform 0.9s cubic-bezier(0.22,0.85,0.3,1) 0.15s;
+}
+body.desktop .hero-slide.active img { opacity: 1; transform: scale(1); }
+body.desktop .hero-slide .hero-caption {
+background: none;
+bottom: auto;
+top: 50%;
+transform: translateY(-50%);
+padding: 0 40px;
+}
+body.desktop .hero-slide .hero-caption h2 { font-size: 3.5rem; letter-spacing: 8px; }
+body.desktop .hero-slide .hero-caption p { font-size: 1rem; letter-spacing: 3px; }
+.hero-dots {
+position: absolute;
+bottom: 12px;
+left: 0; right: 0;
+display: flex;
+justify-content: center;
+gap: 6px;
+z-index: 3;
+}
+.hero-dot {
+width: 7px; height: 7px;
+border-radius: 50%;
+background: rgba(255,255,255,0.55);
+border: none;
+padding: 0;
+cursor: pointer;
+transition: background 0.2s, width 0.2s;
+}
+.hero-dot.active { background: #fff; width: 20px; border-radius: 4px; }
+.section-title {
+padding: 24px 16px 12px;
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+}
+.section-title h2 { font-size: 1.4rem; letter-spacing: 1.5px; }
+.section-title span { font-size: 0.75rem; color: var(--dim); }
+.link-btn {
+background: none; border: none;
+color: var(--primary);
+font-size: 0.72rem;
+font-weight: 700;
+text-transform: uppercase;
+cursor: pointer;
+font-family: 'Oswald', sans-serif;
+letter-spacing: 1px;
+display: flex;
+align-items: center;
+gap: 5px;
+white-space: nowrap;
+}
+.link-btn i { font-size: 0.65rem; }
+.cat-section { border-top: 1px solid var(--border); }
+.cat-section:first-child { border-top: none; }
+.cat-section-title { padding: 22px 16px 12px; align-items: center; }
+.cat-section-title h2 { font-size: 1.15rem; }
+.cat-eyebrow {
+display: block;
+font-family: 'Oswald', sans-serif;
+font-size: 0.62rem;
+font-weight: 600;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: var(--accent);
+margin-bottom: 3px;
+}
+.promo-scroll, .cat-scroll {
+display: flex;
+gap: 12px;
+overflow-x: auto;
+padding: 0 16px 16px;
+scroll-snap-type: x mandatory;
+scrollbar-width: none;
+}
+.promo-scroll::-webkit-scrollbar, .cat-scroll::-webkit-scrollbar { display: none; }
+.promo-card {
+flex: 0 0 88%;
+scroll-snap-align: start;
+border-radius: 14px;
+overflow: hidden;
+aspect-ratio: 4/3;
+position: relative;
+cursor: pointer;
+background: var(--surface);
+transition: transform 0.3s, box-shadow 0.3s;
+}
+.promo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(139,69,19,0.2); }
+.promo-card img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.promo-body {
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+padding: 40px 20px 18px;
+background: linear-gradient(to top, rgba(139,69,19,0.92) 0%, rgba(139,69,19,0.55) 45%, transparent 100%);
+color: #fff;
+z-index: 1;
+}
+.promo-body .badge {
+font-size: 0.62rem;
+font-weight: 700;
+background: var(--accent);
+padding: 4px 9px;
+border-radius: 4px;
+align-self: flex-start;
+margin-bottom: 8px;
+display: inline-block;
+font-family: 'Oswald', sans-serif;
+letter-spacing: 1px;
+color: #2C1810;
+}
+.promo-body strong {
+display: block;
+font-size: 1.25rem;
+font-family: 'Oswald', sans-serif;
+text-transform: uppercase;
+letter-spacing: 0.8px;
+line-height: 1.15;
+margin-bottom: 4px;
+text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.promo-body p {
+font-size: 0.78rem;
+opacity: 0.95;
+margin: 0;
+}
+.badge { font-size: 0.6rem; font-weight: 700; background: var(--accent); color: #2C1810; padding: 4px 8px; border-radius: 4px; align-self: flex-start; margin-bottom: 6px; }
+.cat-card {
+flex: 0 0 42%;
+scroll-snap-align: start;
+aspect-ratio: 3/4;
+border-radius: 12px;
+overflow: hidden;
+position: relative;
+cursor: pointer;
+transition: transform 0.3s, box-shadow 0.3s;
+}
+.cat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(139,69,19,0.25); }
+.cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.cat-card:hover img { transform: scale(1.05); }
+.cat-card span {
+position: absolute; bottom: 0; left: 0; right: 0;
+padding: 16px;
+background: linear-gradient(transparent, rgba(139,69,19,0.85));
+color: #fff;
+font-family: 'Oswald', sans-serif;
+font-size: 1.1rem;
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+.filters {
+display: flex;
+gap: 8px;
+padding: 0 16px 16px;
+overflow-x: auto;
+scrollbar-width: none;
+}
+#shop-filters {
+position: sticky;
+top: var(--header-h);
+z-index: 1500;
+background: var(--bg);
+padding-top: 12px;
+box-shadow: 0 6px 10px -8px rgba(0,0,0,0.18);
+}
+.filter-chip {
+flex-shrink: 0;
+display: inline-flex;
+align-items: center;
+gap: 7px;
+padding: 6px 8px 6px 16px;
+border-radius: 100px;
+border: 1px solid var(--border);
+background: #fff;
+transition: all 0.2s;
+}
+.filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.filter-chip-btn {
+border: none;
+background: none;
+padding: 0;
+font-size: 0.72rem;
+font-weight: 600;
+text-transform: uppercase;
+cursor: pointer;
+font-family: 'Oswald', sans-serif;
+letter-spacing: 0.8px;
+color: inherit;
+white-space: nowrap;
+}
+.filter-chip-count {
+font-size: 0.62rem;
+font-weight: 700;
+background: rgba(0,0,0,0.07);
+color: inherit;
+padding: 3px 8px;
+border-radius: 100px;
+font-family: 'Oswald', sans-serif;
+}
+.filter-chip.active .filter-chip-count { background: rgba(255,255,255,0.25); }
+.filter-chip-share {
+width: 24px;
+height: 24px;
+flex-shrink: 0;
+border-radius: 50%;
+border: none;
+background: rgba(0,0,0,0.06);
+color: inherit;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 0.6rem;
+}
+.filter-chip.active .filter-chip-share { background: rgba(255,255,255,0.25); }
+.card-float-share {
+position: absolute;
+top: 10px; right: 10px;
+width: 32px; height: 32px;
+border-radius: 50%;
+border: none;
+background: rgba(255,255,255,0.92);
+color: var(--primary);
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 0.75rem;
+z-index: 2;
+transition: background 0.2s, transform 0.2s;
+}
+.card-float-share:hover { background: #fff; transform: scale(1.1); }
+.grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 14px;
+padding: 0 16px 24px;
+}
+.card {
+width: 100%;
+text-align: left;
+}
+.card-img-btn, .card-info {
+display: block;
+width: 100%;
+border: none;
+background: none;
+padding: 0;
+text-align: left;
+font-family: inherit;
+color: inherit;
+cursor: pointer;
+}
+.card-img {
+aspect-ratio: 1/1;
+border-radius: 12px;
+overflow: hidden;
+background: var(--surface);
+margin-bottom: 10px;
+position: relative;
+}
+.card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.card:hover .card-img img { transform: scale(1.06); }
+.brand-tag {
+position: absolute;
+top: 8px;
+left: 8px;
+background: rgba(255,251,245,0.92);
+color: var(--primary);
+font-family: 'Oswald', sans-serif;
+font-size: 0.6rem;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+padding: 4px 9px;
+border-radius: 100px;
+z-index: 2;
+}
+.card h4 { font-size: 0.85rem; font-weight: 600; line-height: 1.3; margin-bottom: 4px; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+.card .sku { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 4px; }
+.card .row { display: flex; justify-content: space-between; align-items: center; }
+.card .price { font-weight: 700; font-size: 0.9rem; color: var(--primary); font-family: 'Oswald', sans-serif; }
+.card-actions { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+.card-actions-row { display: flex; gap: 6px; }
+.card-btn {
+width: 100%;
+min-width: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+background: var(--primary);
+color: #fff;
+border: none;
+border-radius: 8px;
+padding: 0 8px;
+height: 36px;
+font-size: 0.66rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.4px;
+font-family: 'Oswald', sans-serif;
+cursor: pointer;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: background 0.2s;
+}
+.card-btn:hover { background: var(--primary-dark); }
+.card-btn-wa {
+flex: 1;
+min-width: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+background: rgba(37,211,102,0.12);
+color: #1a8a45;
+border: 1px solid rgba(37,211,102,0.3);
+border-radius: 8px;
+padding: 0 8px;
+height: 34px;
+font-size: 0.64rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.4px;
+font-family: 'Oswald', sans-serif;
+cursor: pointer;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: background 0.2s;
+}
+.card-btn-wa:hover { background: rgba(37,211,102,0.2); }
+.card-icon-btn {
+width: 34px;
+height: 34px;
+flex-shrink: 0;
+border-radius: 8px;
+border: 1px solid var(--border);
+background: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(--text);
+font-size: 0.82rem;
+transition: all 0.2s;
+}
+.card-icon-btn:hover { background: var(--surface); }
+.card-icon-btn.wa { background: var(--wa); border-color: var(--wa); color: #fff; }
+.card-icon-btn.wa:hover { background: #1da851; }
+#view-product { padding-bottom: 100px; }
+.pd-topbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: 56px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 12px;
+background: rgba(255,251,245,0.95);
+backdrop-filter: blur(12px);
+z-index: 2100;
+border-bottom: 1px solid var(--border);
+}
+.pd-gallery { background: #FDF5E6; }
+.pd-main-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+.pd-thumbs {
+display: flex;
+gap: 8px;
+padding: 12px 16px;
+overflow-x: auto;
+}
+.pd-thumb {
+flex-shrink: 0;
+width: 64px;
+height: 80px;
+border-radius: 8px;
+overflow: hidden;
+border: 2px solid transparent;
+cursor: pointer;
+padding: 0;
+background: none;
+transition: border-color 0.2s;
+}
+.pd-thumb.active { border-color: var(--primary); }
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pd-body { padding: 20px 16px; max-width: 720px; margin: 0 auto; }
+.pd-breadcrumb { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-family: 'Oswald', sans-serif; }
+.pd-breadcrumb button { background: none; border: none; color: var(--primary); cursor: pointer; font-size: inherit; }
+.pd-name { font-size: 1.6rem; line-height: 1.15; margin-bottom: 8px; }
+.pd-sku { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; }
+.pd-sku code { background: var(--surface); padding: 2px 8px; border-radius: 4px; font-family: monospace; }
+.pd-price { font-size: 1.6rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; font-family: 'Oswald', sans-serif; }
+.pd-tabs {
+display: flex;
+gap: 0;
+border-bottom: 1px solid var(--border);
+margin: 24px 0 16px;
+}
+.pd-tab {
+flex: 1;
+padding: 12px;
+border: none;
+background: none;
+font-size: 0.75rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: var(--muted);
+cursor: pointer;
+border-bottom: 2px solid transparent;
+margin-bottom: -1px;
+font-family: 'Oswald', sans-serif;
+transition: all 0.2s;
+}
+.pd-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.pd-panel { display: none; font-size: 0.9rem; line-height: 1.7; color: var(--dim); }
+.pd-panel.active { display: block; }
+.detail-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.detail-table td { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.detail-table td:first-child { color: var(--muted); width: 40%; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+.pd-sticky-bar {
+position: fixed;
+bottom: calc(var(--tab-h) + var(--safe-b));
+left: 0; right: 0;
+padding: 12px 16px;
+background: #fff;
+border-top: 1px solid var(--border);
+z-index: 2050;
+display: flex;
+gap: 12px;
+align-items: center;
+}
+body.product-open .pd-sticky-bar { bottom: var(--safe-b); }
+body.desktop.product-open .pd-sticky-bar { bottom: 0; }
+.pd-sticky-bar .price-mini { font-weight: 700; font-size: 1rem; flex: 1; color: var(--primary); font-family: 'Oswald', sans-serif; }
+.btn-add {
+flex: 2;
+background: var(--primary);
+color: #fff;
+border: none;
+padding: 14px 20px;
+border-radius: 8px;
+font-weight: 700;
+font-size: 0.78rem;
+letter-spacing: 1px;
+text-transform: uppercase;
+cursor: pointer;
+font-family: 'Oswald', sans-serif;
+transition: background 0.2s;
+}
+.btn-add:hover { background: var(--primary-dark); }
+.about-hero {
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: #fff;
+padding: 56px 24px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.about-hero::before {
+content: '';
+position: absolute;
+inset: 0;
+background: url('img/instalaciones/fachada.jpg') center/cover;
+opacity: 0.15;
+mix-blend-mode: overlay;
+}
+.about-hero h1 { font-size: 2.6rem; margin-bottom: 8px; position: relative; }
+.about-hero p { font-size: 0.95rem; opacity: 0.9; position: relative; }
+.about-content { padding: 24px 16px; max-width: 640px; margin: 0 auto; }
+.about-block { margin-bottom: 32px; }
+.about-block h3 { font-size: 1.3rem; margin-bottom: 12px; color: var(--primary); }
+.about-block p { font-size: 0.9rem; line-height: 1.7; color: var(--dim); }
+.about-info {
+display: grid;
+gap: 12px;
+margin-top: 20px;
+}
+.info-card {
+display: flex;
+gap: 14px;
+padding: 16px;
+background: var(--surface);
+border-radius: 12px;
+align-items: flex-start;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.info-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,69,19,0.1); }
+.info-card i { color: var(--primary); font-size: 1.1rem; margin-top: 2px; }
+.info-card strong { display: block; font-size: 0.85rem; margin-bottom: 4px; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+.info-card span { font-size: 0.8rem; color: var(--dim); }
+.branches-section { margin-bottom: 32px; }
+.branches-intro { font-size: 0.88rem; color: var(--dim); line-height: 1.6; margin: 6px 0 16px; }
+.branches-grid { display: grid; gap: 16px; }
+.branch-card {
+border: 1px solid var(--border);
+border-radius: 14px;
+padding: 18px;
+background: #fff;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.branch-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,69,19,0.1); }
+.branch-head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+.branch-logo {
+width: 52px; height: 52px;
+border-radius: 12px;
+background: var(--primary);
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: 'Oswald', sans-serif;
+font-weight: 700;
+font-size: 1.1rem;
+flex-shrink: 0;
+}
+.branch-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.branch-loc { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--dim); margin-top: 2px; }
+.branch-loc i { color: var(--accent); font-size: 0.7rem; }
+.branch-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.branch-row { display: flex; gap: 10px; align-items: flex-start; font-size: 0.85rem; color: var(--text); }
+.branch-row i { color: var(--primary); width: 16px; margin-top: 3px; font-size: 0.85rem; }
+.branch-social { display: flex; gap: 10px; padding-top: 12px; border-top: 1px solid var(--border); }
+.branch-social a {
+width: 38px; height: 38px;
+border-radius: 50%;
+background: var(--surface);
+display: flex;
+align-items: center;
+justify-content: center;
+color: var(--primary);
+text-decoration: none;
+font-size: 1rem;
+transition: all 0.2s;
+}
+.branch-social a:hover { background: var(--primary); color: #fff; }
+.branch-social a.wa { color: var(--wa); }
+.branch-social a.wa:hover { background: var(--wa); color: #fff; }
+
+.facilities-section { margin-bottom: 32px; }
+.facilities-intro { font-size: 0.88rem; color: var(--dim); line-height: 1.6; margin: 6px 0 16px; }
+.facilities-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+}
+.facility-card {
+position: relative;
+border-radius: 12px;
+overflow: hidden;
+aspect-ratio: 1/1;
+cursor: pointer;
+background: var(--surface);
+transition: transform 0.3s, box-shadow 0.3s;
+}
+.facility-card:hover { transform: scale(1.02); box-shadow: 0 8px 24px rgba(139,69,19,0.2); }
+.facility-card img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.4s;
+}
+.facility-card:hover img { transform: scale(1.08); }
+.facility-card .facility-label {
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+padding: 30px 14px 12px;
+background: linear-gradient(transparent, rgba(44,24,16,0.85));
+color: #fff;
+font-family: 'Oswald', sans-serif;
+font-size: 0.85rem;
+text-transform: uppercase;
+letter-spacing: 0.8px;
+}
+.facility-card .facility-label i {
+margin-right: 6px;
+color: var(--accent);
+}
+.facility-card.wide { grid-column: 1 / -1; aspect-ratio: 2/1; }
+
+.cart-panel {
+position: fixed;
+top: 0; right: -100%;
+width: min(400px, 100%);
+height: 100dvh;
+background: #fff;
+z-index: 2700;
+transition: right 0.35s;
+display: flex;
+flex-direction: column;
+padding: 20px 16px calc(20px + var(--safe-b));
+}
+.cart-panel.open { right: 0; }
+.cart-item {
+display: flex;
+gap: 12px;
+padding: 14px 0;
+border-bottom: 1px solid var(--border);
+}
+.cart-item img { width: 56px; height: 72px; object-fit: cover; border-radius: 8px; }
+.cart-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+.btn-wa {
+width: 100%;
+padding: 14px;
+background: var(--wa);
+color: #fff;
+border: none;
+border-radius: 8px;
+font-weight: 700;
+cursor: pointer;
+margin-top: 12px;
+font-family: 'Oswald', sans-serif;
+text-transform: uppercase;
+letter-spacing: 1px;
+transition: background 0.2s;
+}
+.btn-wa:hover { background: #1da851; }
+.bottom-nav {
+position: fixed;
+bottom: 0; left: 0; right: 0;
+height: calc(var(--tab-h) + var(--safe-b));
+padding-bottom: var(--safe-b);
+background: #fff;
+border-top: 1px solid var(--border);
+display: flex;
+z-index: 2000;
+box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+}
+.tab {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+border: none;
+background: none;
+color: var(--muted);
+font-size: 0.55rem;
+font-weight: 600;
+text-transform: uppercase;
+cursor: pointer;
+padding: 6px 2px;
+font-family: 'Oswald', sans-serif;
+letter-spacing: 0.5px;
+transition: color 0.2s;
+}
+.tab i { font-size: 1.1rem; }
+.tab.active { color: var(--primary); }
+.tab.active i { color: var(--primary); }
+.toast {
+position: fixed;
+bottom: calc(var(--tab-h) + var(--safe-b) + 80px);
+left: 50%;
+transform: translateX(-50%) translateY(20px);
+background: var(--primary);
+color: #fff;
+padding: 12px 20px;
+border-radius: 100px;
+font-size: 0.8rem;
+z-index: 9999;
+opacity: 0;
+transition: 0.3s;
+pointer-events: none;
+font-family: 'Oswald', sans-serif;
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.empty { text-align: center; padding: 48px 20px; color: var(--muted); grid-column: 1 / -1; }
+
+/* ── WhatsApp flotante: mensaje a la izquierda del botón ── */
+.wa-float-wrap {
+position: fixed;
+right: 16px;
+bottom: calc(var(--tab-h) + var(--safe-b) + 20px);
+z-index: 3500;
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 10px;
+pointer-events: none;
+}
+.wa-float-wrap > * { pointer-events: auto; }
+.wa-float-msg {
+background: var(--primary);
+color: #FFFBF5;
+font-size: 0.78rem;
+line-height: 1.4;
+padding: 10px 14px;
+border-radius: 12px 4px 12px 12px;
+box-shadow: 0 6px 20px rgba(139,69,19,0.25);
+border: 1px solid var(--accent);
+max-width: 200px;
+font-weight: 500;
+font-family: 'Inter', sans-serif;
+text-align: right;
+}
+.wa-float-btn {
+width: 56px;
+height: 56px;
+border-radius: 50%;
+background: var(--wa);
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 28px;
+box-shadow: 0 4px 16px rgba(37,211,102,0.45);
+text-decoration: none;
+border: none;
+cursor: pointer;
+transition: transform 0.2s;
+flex-shrink: 0;
+}
+.wa-float-btn:hover { transform: scale(1.06); }
+.wa-float-btn:active { transform: scale(0.95); }
+body.product-open .wa-float-wrap {
+bottom: calc(80px + var(--safe-b));
+}
+.footer-dev {
+color: rgba(255,255,255,0.55);
+font-size: 0.75rem;
+text-decoration: none;
+transition: color 0.2s;
+}
+.footer-dev:hover { color: var(--accent); }
+.footer-dev strong { color: rgba(255,255,255,0.9); letter-spacing: 1px; }
+.pd-actions-desktop { display: none; margin-top: 24px; }
+.pd-actions-desktop .btn-add { width: 100%; max-width: 360px; }
+.site-footer {
+background: var(--primary);
+color: #fff;
+padding: 48px 32px 28px;
+margin-top: 48px;
+}
+.site-footer-inner {
+max-width: 1280px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 1.2fr 1fr 1fr;
+gap: 40px;
+padding-bottom: 32px;
+border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.site-footer h3 { font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 12px; }
+.site-footer p { font-size: 0.85rem; opacity: 0.75; line-height: 1.6; }
+.site-footer h4 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; opacity: 0.5; font-family: 'Oswald', sans-serif; }
+.site-footer ul { list-style: none; }
+.site-footer li { margin-bottom: 10px; }
+.site-footer button, .site-footer a {
+background: none; border: none; color: rgba(255,255,255,0.85);
+font-size: 0.85rem; cursor: pointer; text-decoration: none;
+font-family: inherit; padding: 0;
+}
+.site-footer button:hover, .site-footer a:hover { color: var(--accent); }
+.site-footer-bottom {
+max-width: 1280px;
+margin: 24px auto 0;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 0.75rem;
+opacity: 0.5;
+}
+@media (min-width: 769px) {
+.mobile-only { display: none !important; }
+.desktop-only { display: block; }
+body {
+padding-top: 0;
+padding-bottom: 0;
+background: #FFFBF5;
+}
+body.product-open {
+padding-top: 0;
+padding-bottom: 0;
+}
+.bottom-nav { display: none; }
+.app-header {
+position: sticky;
+top: 0;
+box-shadow: 0 1px 0 var(--border);
+}
+.announcement { font-size: 0.65rem; padding: 10px; }
+.header-mobile { display: none !important; }
+.header-desktop {
+display: grid !important;
+grid-template-columns: 1fr auto 1fr;
+align-items: center;
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px 24px 22px;
+gap: 24px;
+}
+.header-nav-left {
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 32px;
+}
+.logo-center {
+font-size: 2.2rem;
+justify-self: center;
+grid-column: 2;
+}
+.header-nav-right {
+display: flex;
+align-items: center;
+justify-content: flex-start;
+gap: 14px;
+}
+.header-nav-right .search-sticky {
+flex: 1;
+max-width: 300px;
+border-radius: 4px;
+}
+.desktop-nav { display: flex; align-items: center; gap: 32px; }
+.desktop-nav button {
+background: none;
+border: none;
+font-size: 0.8rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+cursor: pointer;
+color: var(--text);
+padding: 4px 0;
+position: relative;
+white-space: nowrap;
+font-family: 'Oswald', sans-serif;
+}
+.desktop-nav button:hover { color: var(--primary); }
+.desktop-nav button.active::after {
+content: '';
+position: absolute;
+bottom: -6px;
+left: 0; right: 0;
+height: 2px;
+background: var(--accent);
+}
+.wa-float-wrap { bottom: 28px; }
+body.product-open .wa-float-wrap { bottom: 28px; }
+.view { min-height: auto; }
+body.product-open .view:not(#view-product) { display: none !important; }
+.hero-carousel {
+margin: 24px auto 0;
+border-radius: 12px;
+max-width: 1200px;
+aspect-ratio: 2/1;
+}
+.section-title {
+max-width: 1200px;
+margin-left: auto;
+margin-right: auto;
+padding-left: 24px;
+padding-right: 24px;
+}
+.filters {
+max-width: 1200px;
+margin-left: auto;
+margin-right: auto;
+padding-left: 24px;
+padding-right: 24px;
+}
+.promo-scroll, .cat-scroll {
+max-width: 1200px;
+margin-left: auto;
+margin-right: auto;
+padding-left: 24px;
+padding-right: 24px;
+}
+.grid {
+grid-template-columns: repeat(4, 1fr);
+gap: 24px;
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 24px 48px;
+}
+.cat-scroll { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; overflow: visible; }
+.cat-card { flex: unset; max-width: none; }
+.promo-scroll { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; overflow: visible; }
+.promo-card { flex: unset; aspect-ratio: 4/3; height: auto; min-height: 0; }
+.about-hero {
+max-width: 1200px;
+margin: 24px auto 0;
+border-radius: 12px;
+padding: 64px 32px;
+}
+.about-hero h1 { font-size: 3rem; }
+.about-content { max-width: 720px; padding: 48px 24px 80px; }
+.about-info { grid-template-columns: 1fr 1fr; }
+.facilities-grid { grid-template-columns: repeat(3, 1fr); }
+.site-footer-inner,
+.site-footer-bottom { max-width: 1200px; }
+#view-product { padding-bottom: 0; }
+.pd-page-wrap {
+max-width: 1200px;
+margin: 0 auto;
+padding: 32px 24px 0;
+display: grid;
+grid-template-columns: 1.05fr 0.95fr;
+gap: 56px;
+align-items: start;
+}
+.pd-gallery { background: transparent; }
+.pd-main-img { border-radius: 8px; aspect-ratio: 4/5; }
+.pd-thumbs { padding: 16px 0; }
+.pd-body { padding: 0; max-width: none; }
+.pd-name { font-size: 2.2rem; }
+.pd-sticky-bar { display: none !important; }
+.pd-actions-desktop { display: block; }
+.cart-panel { max-width: 440px; }
+.toast { bottom: 32px; }
+body.product-open #app-header { display: block !important; }
+}
+.header-desktop { display: none; }
+@media (max-width: 768px) {
+.site-footer { display: none; }
+body.product-open .bottom-nav { display: none; }
+body.product-open { padding-bottom: calc(72px + var(--safe-b)); }
+}
+</style>
+</head>
+<body>
+<header class="app-header" id="app-header">
+<div class="announcement"> Pan artesanal recién horneado · Ingredientes de calidad · Delivery a domicilio</div>
+<div class="header-inner">
+<div class="header-row header-mobile">
+<button type="button" class="logo-btn" onclick="App.go('home')">LA DELICIA</button>
+<div class="search-sticky">
+<i class="fas fa-search"></i>
+<input type="search" id="search-input" placeholder="Buscar pan, tortas, facturas..." autocomplete="off">
+</div>
+<button type="button" class="icon-btn" onclick="App.sharePage()" aria-label="Compartir página"><i class="fas fa-share-alt"></i></button>
+<button type="button" class="icon-btn cart-btn" onclick="App.openCart()" aria-label="Bolsa">
+<i class="fas fa-shopping-bag"></i>
+<span class="cart-badge" id="cart-badge">0</span>
+</button>
+</div>
+<div class="header-desktop">
+<nav class="desktop-nav header-nav-left">
+<button type="button" data-nav="home" onclick="App.go('home')">Inicio</button>
+<button type="button" data-nav="shop" onclick="App.go('shop')">Catálogo</button>
+<button type="button" data-nav="about" onclick="App.go('about')">Nosotros</button>
+</nav>
+<button type="button" class="logo-btn logo-center" onclick="App.go('home')">LA DELICIA</button>
+<div class="header-nav-right">
+<div class="search-sticky">
+<i class="fas fa-search"></i>
+<input type="search" id="search-input-desktop" placeholder="Buscar pan, tortas, facturas..." autocomplete="off">
+</div>
+<button type="button" class="icon-btn" onclick="App.sharePage()" aria-label="Compartir página"><i class="fas fa-share-alt"></i></button>
+<button type="button" class="icon-btn cart-btn" onclick="App.openCart()" aria-label="Bolsa">
+<i class="fas fa-shopping-bag"></i>
+<span class="cart-badge" id="cart-badge-desk">0</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<div class="overlay" id="overlay" onclick="App.closeAll()"></div>
+<aside class="menu-sidebar" id="menu-sidebar">
+<div class="menu-head">
+<h2>Menú</h2>
+<button type="button" class="icon-btn" onclick="App.closeMenu()" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+</div>
+<div class="menu-body" id="menu-content"></div>
+<div class="menu-footer">
+<a id="developer-link" href="#" target="_blank" rel="noopener noreferrer">
+Desarrollado por <strong>KEY STUDIO</strong>
+</a>
+</div>
+</aside>
+<main id="view-home" class="view active">
+<div class="hero-carousel" id="hero-carousel"></div>
+<div class="section-title">
+<div><h2>Promociones</h2><span>Ofertas de la semana</span></div>
+</div>
+<div class="promo-scroll" id="home-promos"></div>
+<div class="section-title">
+<div><h2>Categorías</h2></div>
+<button type="button" class="link-btn" onclick="App.go('shop')">Ver catálogo</button>
+</div>
+<div class="cat-scroll" id="home-cats"></div>
+<div class="section-title"><h2>Productos destacados</h2></div>
+<div class="grid" id="home-featured"></div>
+</main>
+<main id="view-shop" class="view">
+<div class="section-title">
+<div><h2>Catálogo</h2><span id="shop-count"></span></div>
+</div>
+<div class="filters" id="shop-filters"></div>
+<div id="shop-categories"></div>
+<div class="grid" id="shop-grid"></div>
+</main>
+<main id="view-product" class="view">
+<div class="pd-topbar mobile-only" id="pd-topbar">
+<button type="button" class="icon-btn" onclick="App.closeProduct()" aria-label="Volver"><i class="fas fa-arrow-left"></i></button>
+<div style="display:flex;gap:8px;">
+<button type="button" class="icon-btn" onclick="App.shareProduct(App.product && App.product.id)" aria-label="Compartir producto"><i class="fas fa-share-alt"></i></button>
+<button type="button" class="icon-btn cart-btn" onclick="App.openCart()">
+<i class="fas fa-shopping-bag"></i>
+<span class="cart-badge" id="cart-badge-pd">0</span>
+</button>
+</div>
+</div>
+<div class="pd-page-wrap">
+<div class="pd-gallery">
+<img class="pd-main-img" id="pd-main-img" src="" alt="">
+<div class="pd-thumbs" id="pd-thumbs"></div>
+</div>
+<div class="pd-body">
+<p class="pd-breadcrumb">
+<button type="button" onclick="App.go('shop')">Catálogo</button>
+/ <span id="pd-cat-label"></span>
+</p>
+<h1 class="pd-name" id="pd-name"></h1>
+<p class="pd-sku">SKU: <code id="pd-sku"></code></p>
+<p class="pd-price" id="pd-price"></p>
+<button type="button" class="link-btn" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;" onclick="App.shareProduct(App.product && App.product.id)"><i class="fas fa-share-alt"></i> Compartir producto</button>
+<div class="pd-actions-desktop">
+<button type="button" class="btn-add" onclick="App.addToCart()">Agregar al pedido — <span id="pd-price-btn"></span></button>
+</div>
+<div class="pd-tabs">
+<button type="button" class="pd-tab active" data-tab="desc" onclick="App.switchTab('desc')">Descripción</button>
+<button type="button" class="pd-tab" data-tab="details" onclick="App.switchTab('details')">Detalles</button>
+</div>
+<div class="pd-panel active" id="panel-desc"></div>
+<div class="pd-panel" id="panel-details"></div>
+</div>
+</div>
+<div class="pd-sticky-bar mobile-only">
+<span class="price-mini" id="pd-price-sticky"></span>
+<button type="button" class="btn-add" onclick="App.addToCart()">Agregar al pedido</button>
+</div>
+</main>
+<main id="view-about" class="view">
+<div class="about-hero">
+<h1>LA DELICIA</h1>
+<p>Panadería Artesanal · Bolivia</p>
+</div>
+<div class="about-content" id="about-content"></div>
+</main>
+<aside class="cart-panel" id="cart-panel">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<h2>Mi pedido</h2>
+<button type="button" class="icon-btn" onclick="App.closeCart()"><i class="fas fa-times"></i></button>
+</div>
+<div id="cart-items" style="flex:1;overflow-y:auto;"></div>
+<div class="cart-footer">
+<div style="display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-bottom:8px;">
+<span>Total estimado</span><span id="cart-total">Bs. 0</span>
+</div>
+<button type="button" class="btn-wa" onclick="App.whatsapp()"><i class="fab fa-whatsapp"></i> Pedir por WhatsApp</button>
+</div>
+</aside>
+<div class="pf-modal-overlay" id="promo-modal-overlay" onclick="App.closePromoModal()"></div>
+<div class="pf-modal" id="promo-modal" role="dialog" aria-modal="true" aria-labelledby="promo-modal-title">
+<button type="button" class="pf-modal-close" onclick="App.closePromoModal()" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+<img class="pf-modal-img" id="promo-modal-img" src="" alt="">
+<div class="pf-modal-body">
+<p class="pf-modal-cat" id="promo-modal-cat"></p>
+<h3 id="promo-modal-title"></h3>
+<p class="pf-modal-desc" id="promo-modal-desc"></p>
+<div id="promo-modal-details" style="margin-bottom:20px;"></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<footer class="site-footer desktop-only">
+<div class="site-footer-inner">
+<div>
+<h3>LA DELICIA</h3>
+<p>Panadería artesanal. Pan fresco, tortas, facturas y delicias horneadas con ingredientes de calidad.</p>
+</div>
+<div>
+<h4>Navegación</h4>
+<ul>
+<li><button type="button" onclick="App.go('home')">Inicio</button></li>
+<li><button type="button" onclick="App.go('shop')">Catálogo</button></li>
+<li><button type="button" onclick="App.go('about')">Nosotros</button></li>
+</ul>
+</div>
+<div>
+<h4>Contacto</h4>
+<ul>
+<li><button type="button" onclick="App.whatsapp()">WhatsApp: 69340915</button></li>
+<li><span style="opacity:0.85;font-size:0.85rem;">Yacuiba, Bolivia</span></li>
+</ul>
+</div>
+</div>
+<div class="site-footer-bottom">
+<span>© <span id="footer-year"></span> LA DELICIA. Todos los derechos reservados.</span>
+<a id="footer-developer" class="footer-dev" href="#" target="_blank" rel="noopener noreferrer">
+Desarrollado por <strong>KEY STUDIO</strong>
+</a>
+</div>
+</footer>
+<div class="wa-float-wrap" id="wa-float-wrap">
+<div class="wa-float-msg">¿Antojo de algo dulce? ¡Haz tu pedido!</div>
+<button type="button" class="wa-float-btn" onclick="App.whatsappHelp()" aria-label="WhatsApp">
+<i class="fab fa-whatsapp"></i>
+</button>
+</div>
+<nav class="bottom-nav" id="bottom-nav">
+<button type="button" class="tab active" data-view="home" onclick="App.go('home')"><i class="fas fa-home"></i><span>Inicio</span></button>
+<button type="button" class="tab" data-view="shop" onclick="App.go('shop')"><i class="fas fa-store"></i><span>Catálogo</span></button>
+<button type="button" class="tab" data-view="about" onclick="App.go('about')"><i class="fas fa-info-circle"></i><span>Nosotros</span></button>
+<button type="button" class="tab" data-view="cart" onclick="App.openCart()"><i class="fas fa-shopping-bag"></i><span>Pedido</span></button>
+</nav>
+<script>
+const CONFIG = {
+phone: '59169340915',
+developer: {
+name: 'KEY STUDIO',
+url: 'https://keystudio.bo'
+},
+store: {
+name: 'LA DELICIA',
+tagline: 'Panadería Artesanal',
+story: 'LA DELICIA nació del amor por el buen pan y el deseo de compartir momentos especiales alrededor de una mesa. Desde nuestros inicios, nos hemos dedicado a elaborar pan fresco, tortas, facturas y delicias horneadas con ingredientes de la más alta calidad. Cada producto es preparado diariamente con dedicación y amor por el buen pan, manteniendo vivas las recetas tradicionales que nos han dado identidad.',
+mission: 'Endulzar y acompañar cada momento de nuestros clientes ofreciendo productos horneados frescos, deliciosos y de calidad, con atención cercana y entrega puntual. Queremos ser la panadería de confianza de cada hogar, llevando a cada mesa el sabor de lo artesanal y el calor de lo recién horneado.',
+vision: 'Ser la panadería artesanal líder en Bolivia, reconocida por la excelencia de nuestros productos, la calidez de nuestro servicio y nuestro compromiso con la tradición y la innovación. Aspiramos a expandirnos y llegar a más familias, manteniendo siempre la esencia de lo hecho a mano.',
+values: 'Amor por lo artesanal, compromiso con la calidad, cercanía con nuestros clientes, responsabilidad con nuestra comunidad y pasión por el buen pan. Creemos en el valor de lo hecho con dedicación y en el poder de compartir alrededor de la mesa.',
+hours: 'Lun – Dom: 6:00 – 21:00',
+address: 'Yacuiba, Bolivia',
+email: 'pedidos@ladelicia.bo',
+instagram: '@ladelicia.bo'
+}
+};
+
+// IMÁGENES DEL HERO (Carrusel principal) - Usa tus fotos reales
+const heroImages = [
+{ src: 'img/hero/hero1.jpg', title: 'LA DELICIA', subtitle: 'Pan artesanal recién horneado' },
+{ src: 'img/hero/hero2.jpg', title: 'LA DELICIA', subtitle: 'Facturas y delicias dulces' },
+{ src: 'img/hero/hero3.jpg', title: 'LA DELICIA', subtitle: 'Tortas para toda ocasión' }
+];
+
+// CATEGORÍAS ACTUALIZADAS
+const categories = [
+{ id: 'panes', name: 'Panes', image: 'img/productos/pan-con-queso.jpg' },
+{ id: 'especiales', name: 'Panes Especiales', image: 'img/productos/pan-de-chola.jpg' },
+{ id: 'molde', name: 'Panes Molde', image: 'img/productos/pan-integral.jpg' },
+{ id: 'hamburguesa', name: 'Pan Hamburguesas', image: 'img/productos/panchito-comun.jpg' },
+{ id: 'chatitas', name: 'Chatitas', image: 'img/productos/chatita-chica.jpg' },
+{ id: 'integrales', name: 'Integrales', image: 'img/productos/pan-integral.jpg' }
+];
+
+const promotions = [
+{ badge: 'FRESCO', title: 'Pan Caliente', sub: 'Recién horneado cada mañana', image: 'img/productos/pan-con-queso.jpg', cat: 'panes',
+fullDescription: 'Disfruta de nuestro pan recién horneado, crujiente por fuera y suave por dentro. Elaborado diariamente con ingredientes de primera calidad.',
+validUntil: 'Todos los días desde las 6:00 AM',
+conditions: ['Precio por unidad', 'Delivery disponible', 'Sujeto a stock del día'] },
+{ badge: 'DULCE', title: 'Tortas para Cumpleaños', sub: 'Encarga tu torta personalizada', image: 'img/productos/pan-de-chola.jpg', cat: 'especiales',
+fullDescription: 'Tortas artesanales para toda ocasión: cumpleaños, aniversarios y eventos especiales. Personaliza sabores, rellenos y decoración.',
+validUntil: 'Consultar por encargo',
+conditions: ['Pedido con 24 h de anticipación', 'Diseño personalizado', 'Delivery coordinado'] },
+{ badge: 'COMBO', title: 'Facturas y Café', sub: 'El desayuno perfecto', image: 'img/productos/chatita-avena.jpg', cat: 'chatitas',
+fullDescription: 'Combo de facturas recién horneadas acompañadas de un café caliente. La combinación ideal para empezar el día.',
+validUntil: 'Consultar vigencia en tienda',
+conditions: ['Disponible en horario de mañana', 'Precio especial', 'Sujeto a stock disponible'] }
+];
+
+const catLabels = { 
+panes: 'Panes', 
+especiales: 'Panes Especiales', 
+molde: 'Panes Molde', 
+hamburguesa: 'Pan Hamburguesas', 
+chatitas: 'Chatitas', 
+integrales: 'Integrales' 
+};
+
+const catTaglines = {
+panes: 'Recién horneado',
+especiales: 'Para toda ocasión',
+molde: 'Suaves y esponjosos',
+hamburguesa: 'Para tus comidas',
+chatitas: 'Crujientes y deliciosas',
+integrales: 'Saludables y ricos'
+};
+
+const branches = [
+{
+id: 1,
+name: 'LA DELICIA — Casa Matriz',
+location: 'Yacuiba',
+initials: 'CM',
+address: 'Av. Principal #123, Zona Centro, Yacuiba',
+phone: '69340915',
+whatsapp: '59169340915',
+hours: 'Lun – Dom: 6:00 – 21:00',
+facebook: 'https://facebook.com/ladelicia.bo',
+instagram: 'https://instagram.com/ladelicia.bo'
+},
+{
+id: 2,
+name: 'LA DELICIA — Sucursal',
+location: 'Yacuiba',
+initials: 'SU',
+address: 'Calle Comercio #456, Zona Sur, Yacuiba',
+phone: '69340915',
+whatsapp: '59169340915',
+hours: 'Lun – Dom: 6:00 – 21:00',
+facebook: 'https://facebook.com/ladelicia.bo',
+instagram: 'https://instagram.com/ladelicia.bo'
+}
+];
+
+// INSTALACIONES - Usa tus fotos reales de la panadería
+const facilities = [
+{ id: 1, label: 'Fachada de la Panadería', icon: 'fas fa-store', image: 'img/instalaciones/fachada.jpg', desc: 'Así luce nuestra panadería por fuera. ¡Te esperamos!' },
+{ id: 2, label: 'Vitrina de Productos', icon: 'fas fa-cookie-bite', image: 'img/instalaciones/vitrina.jpg', desc: 'Exhibición de nuestras delicias recién horneadas.' },
+{ id: 3, label: 'Entrada Principal', icon: 'fas fa-door-open', image: 'img/instalaciones/entrada.jpg', desc: 'Bienvenido a LA DELICIA, tu panadería de confianza.' },
+{ id: 4, label: 'Planta de Producción', icon: 'fas fa-industry', image: 'img/instalaciones/planta.jpg', desc: 'Nuestra planta de producción, donde cada producto cobra vida.' },
+{ id: 5, label: 'Área de Horneado', icon: 'fas fa-fire', image: 'img/instalaciones/horno.jpg', desc: 'Hornos artesanales para un horneado perfecto.' },
+{ id: 6, label: 'Área de Preparación', icon: 'fas fa-utensils', image: 'img/instalaciones/preparacion.jpg', desc: 'Preparación artesanal con ingredientes seleccionados.' }
+];
+
+// PRODUCTOS ACTUALIZADOS SEGÚN TUS IMÁGENES
+const products = [
+// --- CATEGORÍA: PANES ---
+{
+id: 1,
+sku: 'LD-PAN-001',
+name: 'Pan Con Queso',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/pan-con-queso.jpg',
+images: ['img/productos/pan-con-queso.jpg'],
+desc: 'Bolsa 6 Unidades. Pan suave con relleno de queso.',
+description: '<p>Delicioso pan con queso, elaborado con <strong>ingredientes de primera calidad</strong>. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Sabor: 'Queso', Horneado: 'Diario' }
+},
+{
+id: 2,
+sku: 'LD-PAN-002',
+name: 'Chamillo',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/chamillo.jpg',
+images: ['img/productos/chamillo.jpg'],
+desc: 'Bolsa 6 Unidades. Pan tradicional espolvoreado con azúcar.',
+description: '<p>El clásico Chamillo, suave y espolvoreado con azúcar. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Tipo: 'Tradicional', Horneado: 'Diario' }
+},
+{
+id: 3,
+sku: 'LD-PAN-003',
+name: 'Pan De Chola',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/pan-de-chola.jpg',
+images: ['img/productos/pan-de-chola.jpg'],
+desc: 'Bolsa 6 Unidades. Pan dulce tradicional.',
+description: '<p>Pan de chola, una receta tradicional con el toque justo de dulzura. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Tipo: 'Dulce', Horneado: 'Diario' }
+},
+{
+id: 4,
+sku: 'LD-PAN-004',
+name: 'Pan Integral 4 Semillas',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/pan-integral.jpg',
+images: ['img/productos/pan-integral.jpg'],
+desc: 'Bolsa 5 Unidades. Pan integral con semillas.',
+description: '<p>Pan integral enriquecido con 4 semillas. Bolsa de 5 unidades.</p>',
+details: { Presentación: 'Bolsa 5 Unidades', Tipo: 'Integral', Semillas: '4 variedades' }
+},
+{
+id: 5,
+sku: 'LD-PAN-005',
+name: 'Panchito Comun',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/panchito-comun.jpg',
+images: ['img/productos/panchito-comun.jpg'],
+desc: 'Bolsa 6 Unidades. Panecillos suaves para hamburguesa.',
+description: '<p>Panchitos comunes, ideales para hamburguesas o meriendas. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Tipo: 'Común', Uso: 'Hamburguesas' }
+},
+{
+id: 6,
+sku: 'LD-PAN-006',
+name: 'Panchito Integral',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/panchito-integral.jpg',
+images: ['img/productos/panchito-integral.jpg'],
+desc: 'Bolsa 6 Unidades. Panecillos integrales.',
+description: '<p>Panchitos integrales, una opción más saludable. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Tipo: 'Integral', Uso: 'Hamburguesas' }
+},
+{
+id: 7,
+sku: 'LD-PAN-007',
+name: 'Pan Cauca',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/pan-cauca.jpg',
+images: ['img/productos/pan-cauca.jpg'],
+desc: 'Bolsa 6 Unidades. Pan crujiente tradicional.',
+description: '<p>Pan Cauca, crujiente por fuera y suave por dentro. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Tipo: 'Tradicional', Textura: 'Crujiente' }
+},
+{
+id: 8,
+sku: 'LD-PAN-008',
+name: 'Pan Cauca Integral',
+brand: 'LA DELICIA',
+price: 5,
+cat: 'panes',
+img: 'img/productos/pan-cauca-integral.jpg',
+images: ['img/productos/pan-cauca-integral.jpg'],
+desc: 'Bolsa 6 Unidades. Pan crujiente integral.',
+description: '<p>Pan Cauca Integral, crujiente y saludable. Bolsa de 6 unidades.</p>',
+details: { Presentación: 'Bolsa 6 Unidades', Tipo: 'Integral', Textura: 'Crujiente' }
+},
+{
+id: 9,
+sku: 'LD-PAN-009',
+name: 'Panchito Comun (12 Unid)',
+brand: 'LA DELICIA',
+price: 12,
+cat: 'panes',
+img: 'img/productos/panchito-comun.jpg',
+images: ['img/productos/panchito-comun.jpg'],
+desc: 'Bolsa 12 Unidades. Panecillos suaves para hamburguesa.',
+description: '<p>Panchitos comunes en presentación económica de 12 unidades.</p>',
+details: { Presentación: 'Bolsa 12 Unidades', Tipo: 'Común', Uso: 'Hamburguesas' }
+},
+
+// --- CATEGORÍA: CHATITAS ---
+{
+id: 10,
+sku: 'LD-CHA-010',
+name: 'Chatita Chica',
+brand: 'LA DELICIA',
+price: 8,
+cat: 'chatitas',
+img: 'img/productos/chatita-chica.jpg',
+images: ['img/productos/chatita-chica.jpg'],
+desc: 'Bolsa 250 Gramos. Galletas integrales crocantes.',
+description: '<p>Chatitas chicas, galletas integrales crocantes. Bolsa de 250 gramos.</p>',
+details: { Presentación: 'Bolsa 250g', Tipo: 'Integral', Textura: 'Crocante' }
+},
+{
+id: 11,
+sku: 'LD-CHA-011',
+name: 'Chatita De Avena',
+brand: 'LA DELICIA',
+price: 8,
+cat: 'chatitas',
+img: 'img/productos/chatita-avena.jpg',
+images: ['img/productos/chatita-avena.jpg'],
+desc: 'Bolsa 250 Gramos. Galletas de avena integrales.',
+description: '<p>Chatitas de avena, el snack perfecto para acompañar el café. Bolsa de 250 gramos.</p>',
+details: { Presentación: 'Bolsa 250g', Tipo: 'Avena', Textura: 'Crocante' }
+},
+{
+id: 12,
+sku: 'LD-CHA-012',
+name: 'Chatita De Ajo',
+brand: 'LA DELICIA',
+price: 8,
+cat: 'chatitas',
+img: 'img/productos/chatita-ajo.jpg',
+images: ['img/productos/chatita-ajo.jpg'],
+desc: 'Bolsa 250 Gramos. Galletas saladas con sabor a ajo.',
+description: '<p>Chatitas de ajo, ideales para picar. Bolsa de 250 gramos.</p>',
+details: { Presentación: 'Bolsa 250g', Tipo: 'Salada', Sabor: 'Ajo' }
+},
+{
+id: 13,
+sku: 'LD-CHA-013',
+name: 'Chatita Chica Integral',
+brand: 'LA DELICIA',
+price: 8,
+cat: 'chatitas',
+img: 'img/productos/chatita-integral.jpg',
+images: ['img/productos/chatita-integral.jpg'],
+desc: 'Bolsa 250 Gramos. Galletas integrales crocantes.',
+description: '<p>Chatitas integrales, la opción más saludable. Bolsa de 250 gramos.</p>',
+details: { Presentación: 'Bolsa 250g', Tipo: 'Integral', Textura: 'Crocante' }
+},
+{
+id: 14,
+sku: 'LD-CHA-014',
+name: 'Chatita De Quinua',
+brand: 'LA DELICIA',
+price: 8,
+cat: 'chatitas',
+img: 'img/productos/chatita-quinua.jpg',
+images: ['img/productos/chatita-quinua.jpg'],
+desc: 'Bolsa 250 Gramos. Galletas de quinua integrales.',
+description: '<p>Chatitas de quinua, un superalimento en tu snack. Bolsa de 250 gramos.</p>',
+details: { Presentación: 'Bolsa 250g', Tipo: 'Quinua', Textura: 'Crocante' }
+},
+{
+id: 15,
+sku: 'LD-CHA-015',
+name: 'Chatita De Pizza',
+brand: 'LA DELICIA',
+price: 8,
+cat: 'chatitas',
+img: 'img/productos/chatita-pizza.jpg',
+images: ['img/productos/chatita-pizza.jpg'],
+desc: 'Bolsa 250 Gramos. Galletas saladas con sabor a pizza.',
+description: '<p>Chatitas de pizza, el sabor que te encanta en una galleta crujiente. Bolsa de 250 gramos.</p>',
+details: { Presentación: 'Bolsa 250g', Tipo: 'Salada', Sabor: 'Pizza' }
+}
+];
+
+const App = {
+view: 'home',
+activeFilter: 'all',
+cart: JSON.parse(localStorage.getItem('ladelicia_cart') || '[]'),
+product: null,
+heroIndex: 0,
+heroTimer: null,
+previousView: 'home',
+_settingHash: false,
+init() {
+this.renderMenu();
+this.renderHero();
+this.renderHome();
+this.renderShop();
+this.renderAbout();
+this.updateCart();
+const searchMobile = document.getElementById('search-input');
+const searchDesk = document.getElementById('search-input-desktop');
+const onSearchInput = (val) => {
+if (searchMobile) searchMobile.value = val;
+if (searchDesk) searchDesk.value = val;
+this.onSearch(val);
+};
+if (searchMobile) searchMobile.addEventListener('input', (e) => onSearchInput(e.target.value));
+if (searchDesk) searchDesk.addEventListener('input', (e) => onSearchInput(e.target.value));
+const devUrl = CONFIG.developer?.url || '#';
+['developer-link', 'footer-developer'].forEach(id => {
+const el = document.getElementById(id);
+if (el) el.href = devUrl;
+});
+const yearEl = document.getElementById('footer-year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+window.addEventListener('resize', () => this.onResize());
+this.onResize();
+this.setDesktopNav('home');
+window.addEventListener('hashchange', () => this.onHashChange());
+const sharedId = new URLSearchParams(window.location.search).get('producto');
+const sharedCat = new URLSearchParams(window.location.search).get('categoria');
+if (location.hash) {
+this.applyRoute(this.parseHash(), true);
+} else if (sharedId && products.some(p => p.id === Number(sharedId))) {
+this.openProduct(sharedId);
+} else if (sharedCat && categories.some(c => c.id === sharedCat)) {
+this.go('shop', { cat: sharedCat });
+} else {
+history.replaceState(null, '', location.pathname + location.search + '#/');
+}
+},
+parseHash() {
+const raw = (location.hash || '').replace(/^#\/?/, '');
+const parts = raw.split('/').filter(Boolean);
+if (!parts.length) return { view: 'home' };
+if (parts[0] === 'tienda') return { view: 'shop', cat: parts[1] || null };
+if (parts[0] === 'nosotros') return { view: 'about' };
+if (parts[0] === 'producto' && parts[1]) return { view: 'product', id: parts[1] };
+return { view: 'home' };
+},
+applyRoute(route, isInitialLoad) {
+if (route.view === 'product') {
+if (products.some(p => p.id === Number(route.id))) {
+this.openProduct(route.id, { silent: true });
+} else {
+this.go('home', {}, { silent: true });
+}
+} else {
+this.go(route.view, { cat: route.cat }, { silent: true });
+}
+},
+onHashChange() {
+if (this._settingHash) { this._settingHash = false; return; }
+this.applyRoute(this.parseHash());
+},
+updateHash(view, cat) {
+let hash;
+if (view === 'home') hash = '#/';
+else if (view === 'shop') hash = (cat && cat !== 'all') ? '#/tienda/' + cat : '#/tienda';
+else if (view === 'about') hash = '#/nosotros';
+else return;
+if (location.hash !== hash) {
+this._settingHash = true;
+location.hash = hash;
+}
+},
+isMobile() { return window.innerWidth < 769; },
+onResize() {
+document.body.classList.toggle('desktop', !this.isMobile());
+if (!this.isMobile() && document.body.classList.contains('product-open')) {
+document.getElementById('app-header').style.display = '';
+}
+},
+go(view, opts = {}, navOpts = {}) {
+this.closeOverlays();
+if (view !== 'product') {
+document.body.classList.remove('product-open');
+document.getElementById('app-header').style.display = '';
+}
+this.view = view;
+document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+const el = document.getElementById('view-' + view);
+if (el) el.classList.add('active');
+document.querySelectorAll('.tab').forEach(t => {
+t.classList.toggle('active', t.dataset.view === view);
+});
+if (view === 'shop') {
+if (opts.cat) this.filter(opts.cat);
+else this.renderShopGrid();
+}
+if (!navOpts.silent) {
+if (view === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+if (view === 'about') window.scrollTo({ top: 0 });
+}
+this.setDesktopNav(view);
+if (!navOpts.silent) this.updateHash(view, opts.cat);
+},
+setDesktopNav(view) {
+document.querySelectorAll('.desktop-nav button').forEach(b => {
+b.classList.toggle('active', b.dataset.nav === view);
+});
+},
+openProduct(id, navOpts = {}) {
+const p = products.find(x => x.id === Number(id));
+if (!p) return;
+this.closeOverlays();
+this.previousView = document.body.classList.contains('product-open') ? this.previousView : this.view;
+this.product = p;
+document.body.classList.add('product-open');
+document.getElementById('app-header').style.display = this.isMobile() ? 'none' : '';
+document.getElementById('pd-main-img').src = p.images[0];
+document.getElementById('pd-thumbs').innerHTML = p.images.map((src, i) =>
+`<button type="button" class="pd-thumb${i === 0 ? ' active' : ''}" data-idx="${i}" onclick="App.setImage(this)"><img src="${src}" alt=""></button>`
+).join('');
+document.getElementById('pd-cat-label').textContent = catLabels[p.cat];
+document.getElementById('pd-name').textContent = p.name;
+document.getElementById('pd-sku').textContent = p.sku + (p.brand ? ' · ' + p.brand : '');
+document.getElementById('pd-price').textContent = 'Bs. ' + p.price;
+document.getElementById('pd-price-sticky').textContent = 'Bs. ' + p.price;
+const priceBtn = document.getElementById('pd-price-btn');
+if (priceBtn) priceBtn.textContent = 'Bs. ' + p.price;
+document.getElementById('panel-desc').innerHTML = p.description;
+document.getElementById('panel-details').innerHTML = '<table class="detail-table">' +
+Object.entries(p.details).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('') + '</table>';
+this.switchTab('desc');
+if (!navOpts.silent) {
+document.getElementById('view-product').scrollTop = 0;
+window.scrollTo(0, 0);
+}
+document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+document.getElementById('view-product').classList.add('active');
+document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+if (!navOpts.silent) {
+this._settingHash = true;
+location.hash = '#/producto/' + p.id;
+}
+},
+closeProduct() {
+document.body.classList.remove('product-open');
+document.getElementById('app-header').style.display = '';
+this.go(this.previousView || 'shop');
+},
+setImage(btn) {
+const idx = Number(btn.dataset.idx);
+const img = btn.querySelector('img');
+if (!img) return;
+document.getElementById('pd-main-img').src = img.src;
+document.querySelectorAll('.pd-thumb').forEach((t, i) => t.classList.toggle('active', i === idx));
+},
+switchTab(tab) {
+document.querySelectorAll('.pd-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+document.querySelectorAll('.pd-panel').forEach(p => p.classList.remove('active'));
+document.getElementById('panel-' + tab).classList.add('active');
+},
+addToCart() {
+const p = this.product;
+this.cart.push({
+id: p.id,
+sku: p.sku,
+name: p.name,
+price: p.price,
+img: p.img
+});
+this.updateCart();
+localStorage.setItem('ladelicia_cart', JSON.stringify(this.cart));
+this.toast('Añadido al pedido');
+setTimeout(() => this.openCart(), 400);
+},
+openMenu() {
+document.getElementById('menu-sidebar').classList.add('open');
+document.getElementById('overlay').classList.add('show');
+},
+closeMenu() {
+document.getElementById('menu-sidebar').classList.remove('open');
+if (!document.getElementById('cart-panel').classList.contains('open')) {
+document.getElementById('overlay').classList.remove('show');
+}
+},
+openCart() {
+this.closeMenu();
+document.getElementById('cart-panel').classList.add('open');
+document.getElementById('overlay').classList.add('show');
+document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === 'cart'));
+},
+closeCart() {
+document.getElementById('cart-panel').classList.remove('open');
+document.getElementById('overlay').classList.remove('show');
+},
+closeAll() {
+this.closeMenu();
+this.closeCart();
+},
+closeOverlays() {
+this.closeMenu();
+this.closeCart();
+const promoOverlay = document.getElementById('promo-modal-overlay');
+if (promoOverlay && promoOverlay.classList.contains('show')) this.closePromoModal();
+},
+updateCart() {
+const n = this.cart.length;
+document.getElementById('cart-badge').textContent = n;
+['cart-badge-desk', 'cart-badge-pd'].forEach(id => {
+const el = document.getElementById(id);
+if (el) el.textContent = n;
+});
+let total = 0;
+const box = document.getElementById('cart-items');
+if (!this.cart.length) {
+box.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px 0;">Tu pedido está vacío</p>';
+} else {
+box.innerHTML = this.cart.map((item, i) => {
+total += item.price;
+return `<div class="cart-item">
+<img src="${item.img}" alt="">
+<div style="flex:1;">
+<p style="font-weight:600;font-size:0.85rem;">${item.name}</p>
+<p style="font-size:0.7rem;color:var(--dim);">SKU ${item.sku}</p>
+<p style="font-weight:700;margin-top:4px;color:var(--accent);">Bs. ${item.price}</p>
+</div>
+<button type="button" class="icon-btn" style="width:36px;height:36px;" onclick="App.removeCart(${i})"><i class="fas fa-trash-alt"></i></button>
+</div>`;
+}).join('');
+}
+document.getElementById('cart-total').textContent = 'Bs. ' + total;
+},
+removeCart(i) {
+this.cart.splice(i, 1);
+localStorage.setItem('ladelicia_cart', JSON.stringify(this.cart));
+this.updateCart();
+},
+whatsapp() {
+const phone = CONFIG.phone;
+let msg;
+if (this.cart.length) {
+const lines = this.cart.map(p => `• ${p.name} (SKU: ${p.sku})`).join('\n');
+msg = ` *PEDIDO LA DELICIA*\n${lines}\n*Total estimado: ${document.getElementById('cart-total').textContent}*`;
+} else {
+msg = 'Hola LA DELICIA, me gustaría más información sobre sus productos de panadería.';
+}
+window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+},
+whatsappHelp() {
+const msg = 'Hola LA DELICIA, quiero consultar disponibilidad y precios de sus productos.';
+window.open('https://wa.me/' + CONFIG.phone + '?text=' + encodeURIComponent(msg), '_blank');
+},
+toast(msg) {
+const t = document.getElementById('toast');
+t.textContent = msg;
+t.classList.add('show');
+setTimeout(() => t.classList.remove('show'), 2500);
+},
+onSearch(q) {
+q = q.trim().toLowerCase();
+if (!q) {
+if (this.view === 'shop') this.renderShopGrid();
+if (this.view === 'home') this.renderGrid('home-featured', products.slice(0, 4));
+return;
+}
+this.go('shop');
+const found = products.filter(p =>
+p.name.toLowerCase().includes(q) ||
+p.sku.toLowerCase().includes(q) ||
+p.cat.includes(q)
+);
+document.getElementById('shop-categories').style.display = 'none';
+document.getElementById('shop-categories').innerHTML = '';
+document.getElementById('shop-grid').style.display = '';
+this.renderGrid('shop-grid', found);
+document.getElementById('shop-count').textContent = '(' + found.length + ' resultados)';
+},
+filter(cat) {
+this.activeFilter = cat;
+document.querySelectorAll('#shop-filters .filter-chip').forEach(b =>
+b.classList.toggle('active', b.dataset.cat === cat)
+);
+if (cat === 'all') {
+document.getElementById('shop-grid').style.display = 'none';
+document.getElementById('shop-grid').innerHTML = '';
+document.getElementById('shop-categories').style.display = '';
+this.renderShopCategories();
+document.getElementById('shop-count').textContent = '(' + products.length + ' productos)';
+} else {
+document.getElementById('shop-categories').style.display = 'none';
+document.getElementById('shop-categories').innerHTML = '';
+document.getElementById('shop-grid').style.display = '';
+const data = products.filter(p => p.cat === cat);
+this.renderGrid('shop-grid', data);
+document.getElementById('shop-count').textContent = '(' + data.length + ' productos)';
+}
+},
+renderShopCategories() {
+const cont = document.getElementById('shop-categories');
+cont.innerHTML = categories.map(c => {
+const catProducts = products.filter(p => p.cat === c.id);
+if (!catProducts.length) return '';
+const latest = catProducts.slice(-4).reverse();
+const tagline = catTaglines[c.id] ? `<span class="cat-eyebrow">${catTaglines[c.id]}</span>` : '';
+return `<div class="cat-section">
+<div class="section-title cat-section-title">
+<div>${tagline}<h2>${c.name}</h2></div>
+<button type="button" class="link-btn" onclick="App.filter('${c.id}')">Ver todo <i class="fas fa-chevron-right"></i></button>
+</div>
+<div class="grid">${latest.map(p => this.productCard(p)).join('')}</div>
+</div>`;
+}).join('');
+},
+renderGrid(id, data) {
+const g = document.getElementById(id);
+g.innerHTML = data.length ? data.map(p => this.productCard(p)).join('') :
+'<p class="empty">No hay productos.</p>';
+},
+productCard(p) {
+const brandTag = p.brand ? `<span class="brand-tag">${p.brand}</span>` : '';
+return `<div class="card">
+<button type="button" class="card-img-btn" onclick="App.openProduct(${p.id})" aria-label="Ver ${p.name}">
+<div class="card-img"><img src="${p.img}" alt="${p.name}" loading="lazy">${brandTag}</div>
+</button>
+<button type="button" class="card-info" onclick="App.openProduct(${p.id})">
+<p class="sku">${p.sku}${p.brand ? ' · ' + p.brand : ''}</p>
+<h4>${p.name}</h4>
+<div class="row"><span class="price">Bs. ${p.price}</span><span style="font-size:0.65rem;color:var(--muted);">${catLabels[p.cat]}</span></div>
+</button>
+<div class="card-actions">
+<button type="button" class="card-btn" onclick="App.openProduct(${p.id})"><i class="fas fa-eye"></i> Ver detalles</button>
+<div class="card-actions-row">
+<button type="button" class="card-btn-wa" onclick="event.stopPropagation(); App.quickWhatsapp(${p.id})"><i class="fab fa-whatsapp"></i> Consultar</button>
+<button type="button" class="card-icon-btn" onclick="event.stopPropagation(); App.shareProduct(${p.id})" aria-label="Compartir producto"><i class="fas fa-share-alt"></i></button>
+</div>
+</div>
+</div>`;
+},
+quickWhatsapp(id) {
+const p = products.find(x => x.id === Number(id));
+if (!p) return;
+const msg = `Hola LA DELICIA, me interesa este producto:\n*${p.name}* (SKU: ${p.sku})\nBs. ${p.price}\n¿Podrían darme más información?`;
+window.open('https://wa.me/' + CONFIG.phone + '?text=' + encodeURIComponent(msg), '_blank');
+},
+productUrl(id) {
+const url = new URL(window.location.href);
+url.hash = '';
+url.searchParams.set('producto', id);
+return url.toString();
+},
+async shareProduct(id) {
+const p = products.find(x => x.id === Number(id));
+if (!p) return;
+const url = this.productUrl(id);
+const shareData = { title: p.name + ' · LA DELICIA', text: `Mira este producto de LA DELICIA: ${p.name} — Bs. ${p.price}`, url };
+if (navigator.share) {
+try { await navigator.share(shareData); } catch (e) { /* cancelado por el usuario */ }
+return;
+}
+try {
+await navigator.clipboard.writeText(url);
+this.toast('Enlace copiado');
+} catch (e) {
+window.open('https://wa.me/?text=' + encodeURIComponent(shareData.text + ' ' + url), '_blank');
+}
+},
+categoryUrl(cat) {
+const url = new URL(window.location.href);
+url.hash = '';
+url.searchParams.delete('producto');
+url.searchParams.set('categoria', cat);
+return url.toString();
+},
+async shareCategory(cat) {
+const url = this.categoryUrl(cat);
+const label = catLabels[cat] || cat;
+const shareData = { title: label + ' · LA DELICIA', text: `Mira los productos de ${label} en LA DELICIA:`, url };
+if (navigator.share) {
+try { await navigator.share(shareData); } catch (e) { /* cancelado por el usuario */ }
+return;
+}
+try {
+await navigator.clipboard.writeText(url);
+this.toast('Enlace de categoría copiado');
+} catch (e) {
+window.open('https://wa.me/?text=' + encodeURIComponent(shareData.text + ' ' + url), '_blank');
+}
+},
+pageUrl() {
+const url = new URL(window.location.href);
+url.hash = '';
+url.searchParams.delete('producto');
+url.searchParams.delete('categoria');
+return url.toString();
+},
+async sharePage() {
+const url = this.pageUrl();
+const shareData = { title: 'LA DELICIA · Panadería Artesanal', text: 'Mira el catálogo de LA DELICIA: pan, tortas, facturas y más.', url };
+if (navigator.share) {
+try { await navigator.share(shareData); } catch (e) { /* cancelado por el usuario */ }
+return;
+}
+try {
+await navigator.clipboard.writeText(url);
+this.toast('Enlace copiado');
+} catch (e) {
+window.open('https://wa.me/?text=' + encodeURIComponent(shareData.text + ' ' + url), '_blank');
+}
+},
+renderMenu() {
+const promos = promotions.map((pr, idx) =>
+`<div class="menu-promo" onclick="App.closeMenu(); App.openPromoModal(${idx});">
+<strong>${pr.badge} — ${pr.title}</strong><span>${pr.sub}</span>
+</div>`
+).join('');
+const cats = categories.map(c =>
+`<button type="button" class="menu-link" onclick="App.filter('${c.id}'); App.go('shop'); App.closeMenu();">
+<i class="fas fa-tag"></i> ${c.name}
+</button>`
+).join('');
+document.getElementById('menu-content').innerHTML = `
+<p class="menu-label">Promociones</p>${promos}
+<p class="menu-label">Categorías</p>${cats}
+<p class="menu-label">Catálogo</p>
+<button type="button" class="menu-link" onclick="App.go('shop'); App.closeMenu();"><i class="fas fa-store"></i> Ver catálogo</button>
+<button type="button" class="menu-link" onclick="App.go('about'); App.closeMenu();"><i class="fas fa-info-circle"></i> Sobre LA DELICIA</button>
+<button type="button" class="menu-link" onclick="App.whatsapp(); App.closeMenu();"><i class="fab fa-whatsapp"></i> WhatsApp: 69340915</button>
+<button type="button" class="menu-link" onclick="App.sharePage(); App.closeMenu();"><i class="fas fa-share-alt"></i> Compartir tienda</button>
+`;
+},
+renderHero() {
+const track = document.getElementById('hero-carousel');
+if (!track) return;
+track.innerHTML = heroImages.map((slide, i) =>
+`<div class="hero-slide${i === 0 ? ' active' : ''}" style="background-image:url('${slide.src}')">
+<img src="${slide.src}" alt="${slide.title} — ${slide.subtitle}" loading="${i === 0 ? 'eager' : 'lazy'}">
+<div class="hero-caption">
+<h2>${slide.title}</h2>
+<p>${slide.subtitle}</p>
+</div>
+</div>`
+).join('') +
+`<div class="hero-dots">${heroImages.map((_, i) =>
+`<button type="button" class="hero-dot${i === 0 ? ' active' : ''}" data-idx="${i}" onclick="App.goToHeroSlide(${i})" aria-label="Ver imagen ${i + 1}"></button>`
+).join('')}</div>`;
+this.heroIndex = 0;
+this.startHeroAutoplay();
+},
+startHeroAutoplay() {
+if (this.heroTimer) clearInterval(this.heroTimer);
+this.heroTimer = setInterval(() => {
+this.goToHeroSlide((this.heroIndex + 1) % heroImages.length, true);
+}, 4000);
+},
+goToHeroSlide(idx, fromAutoplay) {
+this.heroIndex = idx;
+document.querySelectorAll('#hero-carousel .hero-slide').forEach((el, i) => el.classList.toggle('active', i === idx));
+document.querySelectorAll('#hero-carousel .hero-dot').forEach((el, i) => el.classList.toggle('active', i === idx));
+if (!fromAutoplay) this.startHeroAutoplay();
+},
+renderHome() {
+document.getElementById('home-promos').innerHTML = promotions.map((pr, idx) =>
+`<article class="promo-card" onclick="App.openPromoModal(${idx});">
+<button type="button" class="card-float-share" onclick="event.stopPropagation(); App.sharePromo(${idx})" aria-label="Compartir promoción"><i class="fas fa-share-alt"></i></button>
+<img src="${pr.image}" alt=""><div class="promo-body"><span class="badge">${pr.badge}</span><strong>${pr.title}</strong><p>${pr.sub}</p></div>
+</article>`
+).join('');
+document.getElementById('home-cats').innerHTML = categories.map(c =>
+`<article class="cat-card" onclick="App.filter('${c.id}'); App.go('shop');">
+<img src="${c.image}" alt="${c.name}"><span>${c.name}</span>
+</article>`
+).join('');
+this.renderGrid('home-featured', products.slice(0, 4));
+},
+renderShop() {
+const cats = ['all', ...categories.map(c => c.id)];
+document.getElementById('shop-filters').innerHTML = cats.map(c => {
+const count = c === 'all' ? products.length : products.filter(p => p.cat === c).length;
+const label = c === 'all' ? 'Todos' : catLabels[c];
+const shareBtn = c === 'all' ? '' : `<button type="button" class="filter-chip-share" onclick="event.stopPropagation(); App.shareCategory('${c}')" aria-label="Compartir categoría ${label}"><i class="fas fa-share-alt"></i></button>`;
+return `<div class="filter-chip${c === 'all' ? ' active' : ''}" data-cat="${c}">
+<button type="button" class="filter-chip-btn" onclick="App.filter('${c}')">${label}</button>
+<span class="filter-chip-count">${count}</span>
+${shareBtn}
+</div>`;
+}).join('');
+this.renderShopGrid();
+},
+renderShopGrid() {
+this.filter(this.activeFilter);
+},
+renderAbout() {
+const s = CONFIG.store;
+document.getElementById('about-content').innerHTML = `
+<div class="about-block"><h3>Nuestra historia</h3><p>${s.story}</p></div>
+<div class="about-block"><h3>Misión</h3><p>${s.mission}</p></div>
+<div class="about-block"><h3>Visión</h3><p>${s.vision}</p></div>
+<div class="about-block"><h3>Nuestros Valores</h3><p>${s.values}</p></div>
+
+<div class="about-block facilities-section">
+<h3>Nuestras Instalaciones</h3>
+<p class="facilities-intro">Conoce nuestra planta de producción y nuestro punto de venta. Cada rincón está pensado para ofrecerte productos frescos y de calidad.</p>
+<div class="facilities-grid" id="facilities-grid"></div>
+</div>
+
+<div class="about-block branches-section">
+<h3>Dónde Encontrarnos</h3>
+<p class="branches-intro">Contamos con nuestra Casa Matriz y una Sucursal en Yacuiba. Visítanos y conoce nuestras delicias recién horneadas.</p>
+<div class="branches-grid" id="branches-grid"></div>
+</div>
+<div class="about-block"><h3>¿Por qué elegir LA DELICIA?</h3>
+<div style="display:grid;gap:10px;margin-top:12px;">
+<div class="info-card"><i class="fas fa-check-circle"></i><div><strong>Ingredientes de calidad</strong><span>Elaboramos con insumos seleccionados y recetas artesanales.</span></div></div>
+<div class="info-card"><i class="fas fa-clock"></i><div><strong>Recién horneado</strong><span>Horneamos diariamente para garantizar frescura.</span></div></div>
+<div class="info-card"><i class="fas fa-truck"></i><div><strong>Delivery a domicilio</strong><span>Entrega rápida en Yacuiba y alrededores.</span></div></div>
+<div class="info-card"><i class="fas fa-users"></i><div><strong>Atención personalizada</strong><span>Asesoramiento para pedidos personalizados.</span></div></div>
+</div>
+</div>
+<div class="about-info">
+<div class="info-card"><i class="fas fa-clock"></i><div><strong>Horario</strong><span>${s.hours}</span></div></div>
+<div class="info-card"><i class="fas fa-map-marker-alt"></i><div><strong>Ubicación</strong><span>${s.address}</span></div></div>
+<div class="info-card"><i class="fas fa-phone"></i><div><strong>Teléfonos</strong><span>69340915</span></div></div>
+<div class="info-card"><i class="fab fa-instagram"></i><div><strong>Instagram</strong><span>${s.instagram}</span></div></div>
+</div>
+`;
+this.renderBranches();
+this.renderFacilities();
+},
+renderBranches() {
+document.getElementById('branches-grid').innerHTML = branches.map(b => `
+<div class="branch-card">
+<div class="branch-head">
+<div class="branch-logo">${b.initials}</div>
+<div>
+<div class="branch-name">${b.name}</div>
+<div class="branch-loc"><i class="fas fa-map-marker-alt"></i>${b.location}</div>
+</div>
+</div>
+<div class="branch-rows">
+<div class="branch-row"><i class="fas fa-map-marker-alt"></i><span>${b.address}</span></div>
+<div class="branch-row"><i class="fas fa-phone"></i><span>${b.phone}</span></div>
+<div class="branch-row"><i class="fas fa-clock"></i><span>${b.hours}</span></div>
+</div>
+<div class="branch-social">
+<a class="wa" href="https://wa.me/${b.whatsapp}" target="_blank" rel="noopener" aria-label="WhatsApp ${b.name}"><i class="fab fa-whatsapp"></i></a>
+<a href="${b.facebook}" target="_blank" rel="noopener" aria-label="Facebook ${b.name}"><i class="fab fa-facebook-f"></i></a>
+<a href="${b.instagram}" target="_blank" rel="noopener" aria-label="Instagram ${b.name}"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+`).join('');
+},
+renderFacilities() {
+const grid = document.getElementById('facilities-grid');
+if (!grid) return;
+grid.innerHTML = facilities.map((f, i) => `
+<div class="facility-card${i === 0 ? ' wide' : ''}" onclick="App.openFacility(${i})">
+<img src="${f.image}" alt="${f.label}" loading="lazy">
+<div class="facility-label"><i class="${f.icon}"></i>${f.label}</div>
+</div>
+`).join('');
+},
+openFacility(idx) {
+const f = facilities[Number(idx)];
+if (!f) return;
+this.toast(f.label + ' — ' + f.desc);
+},
+async sharePromo(idx) {
+const pr = promotions[Number(idx)];
+if (!pr) return;
+const url = this.categoryUrl(pr.cat);
+const shareData = { title: pr.title + ' · LA DELICIA', text: `Promoción de LA DELICIA: ${pr.title} — ${pr.sub}`, url };
+if (navigator.share) {
+try { await navigator.share(shareData); } catch (e) { /* cancelado */ }
+return;
+}
+try {
+await navigator.clipboard.writeText(url);
+this.toast('Enlace copiado');
+} catch (e) {
+window.open('https://wa.me/?text=' + encodeURIComponent(shareData.text + ' ' + url), '_blank');
+}
+},
+openPromoModal(idx) {
+const pr = promotions[Number(idx)];
+if (!pr) return;
+document.getElementById('promo-modal-img').src = pr.image;
+document.getElementById('promo-modal-img').alt = pr.title;
+document.getElementById('promo-modal-cat').textContent = pr.badge + ' · ' + catLabels[pr.cat];
+document.getElementById('promo-modal-title').textContent = pr.title;
+document.getElementById('promo-modal-desc').textContent = pr.fullDescription || pr.sub;
+document.getElementById('promo-modal-details').innerHTML = '<table class="detail-table">' +
+`<tr><td>Categoría</td><td>${catLabels[pr.cat]}</td></tr>` +
+`<tr><td>Vigencia</td><td>${pr.validUntil || 'Consultar disponibilidad'}</td></tr>` +
+(pr.conditions && pr.conditions.length ? `<tr><td>Condiciones</td><td>${pr.conditions.join(' · ')}</td></tr>` : '') +
+'</table>';
+document.getElementById('promo-modal-overlay').classList.add('show');
+document.getElementById('promo-modal').classList.add('show');
+document.body.style.overflow = 'hidden';
+},
+closePromoModal() {
+document.getElementById('promo-modal-overlay').classList.remove('show');
+document.getElementById('promo-modal').classList.remove('show');
+document.body.style.overflow = '';
+}
+};
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+</body>
+</html>
