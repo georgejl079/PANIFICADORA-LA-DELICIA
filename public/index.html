@@ -1468,9 +1468,12 @@ body.product-open .wa-float-wrap {
   <img class="pf-modal-img" id="promo-modal-img" src="" alt="">
   <div class="pf-modal-body">
     <p class="pf-modal-cat" id="promo-modal-cat"></p>
-    <h3 id="promo-modal-title"></h3>
+    <h3 class="pf-modal-title" id="promo-modal-title"></h3>
     <p class="pf-modal-desc" id="promo-modal-desc"></p>
     <div id="promo-modal-details" style="margin-bottom:20px;"></div>
+    <button type="button" class="btn btn-primary" style="width:100%" onclick="App.orderPromo()">
+      <i class="fas fa-shopping-bag"></i> Pedir esta promoción
+    </button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -2241,6 +2244,7 @@ const App = {
   openPromoModal(idx) {
     const pr = this.data.promotions[Number(idx)];
     if (!pr) return;
+    this._currentPromo = pr;
     document.getElementById('promo-modal-img').src = pr.image;
     document.getElementById('promo-modal-img').alt = pr.title;
     document.getElementById('promo-modal-cat').textContent = pr.badge + ' · ' + (this.catLabels[pr.cat_id] || '');
@@ -2255,13 +2259,25 @@ const App = {
     document.getElementById('promo-modal-overlay').classList.add('show');
     document.getElementById('promo-modal').classList.add('show');
     document.body.style.overflow = 'hidden';
+    const waWrap = document.getElementById('wa-float-wrap');
+    if (waWrap) waWrap.classList.add('hidden');
   },
 
   closePromoModal() {
     document.getElementById('promo-modal-overlay').classList.remove('show');
     document.getElementById('promo-modal').classList.remove('show');
     document.body.style.overflow = '';
-  }
+    const waWrap = document.getElementById('wa-float-wrap');
+    if (waWrap) waWrap.classList.remove('hidden');
+    this._currentPromo = null;
+  },
+
+  orderPromo() {
+    const pr = this._currentPromo;
+    if (!pr) return;
+    const msg = `Hola, quiero pedir la promoción: ${pr.title} — ${pr.sub}`;
+    window.open('https://wa.me/' + this.phone + '?text=' + encodeURIComponent(msg), '_blank');
+  },
 };
 
 document.addEventListener('DOMContentLoaded', () => App.init());
