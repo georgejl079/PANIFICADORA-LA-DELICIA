@@ -934,7 +934,7 @@ const Admin = {
       const { data: { publicUrl } } = supabaseClient.storage.from('ladelicia-uploads').getPublicUrl(data.path);
       this.toast('Imagen optimizada y subida: ' + publicUrl);
       const modal = document.getElementById('modal');
-      const urlInput = modal.querySelector('input[name="src"], input[name="image"], input[name="img"]');
+      const urlInput = modal.querySelector('input[name="src"], input[name="image"], input[name="img"], input[name="logo_url"]');
       if (urlInput) urlInput.value = publicUrl;
     } catch (err) {
       this.toast('Error al procesar imagen', 'error');
