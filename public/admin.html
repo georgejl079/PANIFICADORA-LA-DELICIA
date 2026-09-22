@@ -632,7 +632,7 @@ const Admin = {
         <div class="form-group"><label>Precio (Bs.)</label><input type="number" step="0.01" name="price" value="${row?.price || ''}" required></div>
         <div class="form-group"><label>Categoría</label><select name="cat_id"><option value="">--</option>${(cats||[]).map(c=>`<option value="${c.id}" ${row?.cat_id==c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
         <div class="form-group"><label>Stock</label><input type="number" name="stock" value="${row?.stock ?? 0}"></div>
-        <div class="form-group"><label>Descripción corta</label><input name="desc" value="${row?.desc || ''}"></div>
+        <div class="form-group"><label>Descripción corta</label><input name="short_desc" value="${row?.short_desc || ''}"></div>
         <div class="form-group"><label>Descripción HTML</label><textarea name="description">${row?.description || ''}</textarea></div>
         <div class="form-group"><label>Detalles (JSON)</label><textarea name="details" placeholder='{"Presentación": "Bolsa 6 unidades"}'>${row?.details || ''}</textarea></div>
         <div class="form-group"><label>URL imagen principal</label><input name="img" value="${row?.img || ''}"></div>
@@ -653,6 +653,7 @@ const Admin = {
       data.price = parseFloat(data.price);
       data.stock = parseInt(data.stock) || 0;
       if (data.details && !data.details.startsWith('{')) data.details = '{}';
+      delete data.short_desc;
       data.cat_id = data.cat_id ? parseInt(data.cat_id, 10) : null;
       if (isEdit) {
         const { error } = await this.from('products').update(data).eq('id', id);
