@@ -1642,7 +1642,7 @@ const App = {
     if (appearance.logo_url) {
       const logoBtn = document.querySelector('.logo-btn');
       if (logoBtn) {
-        logoBtn.innerHTML = `<img src="${appearance.logo_url}" style="height:36px;object-fit:contain" alt="LA DELICIA">`;
+        logoBtn.innerHTML = `<img src="${appearance.logo_url}" style="height:auto;max-height:56px;width:auto;max-width:160px;object-fit:contain" alt="LA DELICIA">`;
       }
     }
   },
