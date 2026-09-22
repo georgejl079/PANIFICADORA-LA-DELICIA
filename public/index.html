@@ -1040,6 +1040,9 @@ body.desktop.product-open .pd-sticky-bar { bottom: 0; }
 .pf-modal-body {
   padding: 18px 18px 22px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .pf-modal-cat {
   font-size: 0.72rem;
@@ -1047,20 +1050,30 @@ body.desktop.product-open .pd-sticky-bar { bottom: 0; }
   color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
   font-family: 'Oswald', sans-serif;
 }
 .pf-modal-title {
   font-size: 1.35rem;
   line-height: 1.2;
-  margin-bottom: 10px;
+  margin: 0;
   font-family: 'Oswald', sans-serif;
 }
 .pf-modal-desc {
   font-size: 0.9rem;
   color: var(--dim);
   line-height: 1.6;
-  margin-bottom: 14px;
+  margin: 0;
+}
+.pf-modal-details {
+  margin-top: 4px;
+}
+.pf-modal-action {
+  margin-top: 12px;
+}
+.pf-modal-action .btn-wa {
+  width: 100%;
+  justify-content: center;
 }
 @media (max-width: 768px) {
   .pf-modal {
@@ -1470,10 +1483,12 @@ body.product-open .wa-float-wrap {
     <p class="pf-modal-cat" id="promo-modal-cat"></p>
     <h3 class="pf-modal-title" id="promo-modal-title"></h3>
     <p class="pf-modal-desc" id="promo-modal-desc"></p>
-    <div id="promo-modal-details" style="margin-bottom:20px;"></div>
-    <button type="button" class="btn btn-primary" style="width:100%" onclick="App.orderPromo()">
-      <i class="fas fa-shopping-bag"></i> Pedir esta promoción
-    </button>
+    <div class="pf-modal-details" id="promo-modal-details"></div>
+    <div class="pf-modal-action">
+      <button type="button" class="btn btn-wa" style="width:100%" onclick="App.orderPromo()">
+        <i class="fab fa-whatsapp"></i> Pedir esta promoción
+      </button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
