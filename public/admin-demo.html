@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LA DELICIA — Panel Admin (Demo)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#8B4513;--primary-dark:#6B3410;--accent:#F5B400;--bg:#FFFBF5;--surface:#FDF5E6;--text:#2C1810;--dim:#6B5B4F;--muted:#9A8A7A;--border:#E8D9C5;--success:#25D366;--danger:#dc3545;--warning:#F5B400;--sidebar-w:260px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;overscroll-behavior:none}
+.app{display:flex;min-height:100vh;min-height:100dvh}
+.sidebar{width:var(--sidebar-w);background:var(--primary);color:#fff;padding:20px 0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:1100;transition:transform .25s ease;will-change:transform}
+.sidebar h2{font-family:'Oswald',sans-serif;font-size:1.25rem;letter-spacing:3px;padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,0.15);margin-bottom:6px}
+.sidebar-nav{list-style:none;padding:6px 0}
+.sidebar-nav li a{display:flex;align-items:center;gap:12px;padding:13px 20px;color:rgba(255,255,255,0.9);text-decoration:none;font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;min-height:48px}
+.sidebar-nav li a:hover,.sidebar-nav li a.active{background:rgba(255,255,255,0.08);color:#fff;border-left-color:var(--accent)}
+.sidebar-nav li a i{width:20px;text-align:center;font-size:.95rem}
+.main{flex:1;padding:20px;margin-left:var(--sidebar-w);min-width:0}
+.login-wrap{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,0.08);border:1px solid var(--border)}
+.login-card h1{font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:6px;letter-spacing:2px}
+.login-card p{color:var(--muted);font-size:.85rem;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:6px;font-family:'Oswald',sans-serif}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;background:#fff;transition:border .2s;min-height:44px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary)}
+.form-group textarea{resize:vertical;min-height:100px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border:none;border-radius:10px;font-family:'Oswald',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-decoration:none;min-height:44px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-accent{background:var(--accent);color:var(--text)}
+.btn-accent:hover{background:#e0a200}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-sm{padding:8px 12px;font-size:.72rem;min-height:36px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:18px;border:1px solid var(--border)}
+.card h3{font-family:'Oswald',sans-serif;font-size:1.05rem;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.stat{background:#fff;border-radius:14px;padding:18px;border:1px solid var(--border)}
+.stat-value{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;color:var(--primary)}
+.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:0 18px}
+.table-wrap>table{margin:0 -18px;min-width:640px}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-family:'Oswald',sans-serif;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;white-space:nowrap;background:#fff}
+tr:hover{background:var(--surface)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{padding:8px 10px;border:none;border-radius:8px;cursor:pointer;font-size:.8rem;transition:all .2s;min-height:36px;min-width:36px;display:inline-flex;align-items:center;justify-content:center}
+.actions .edit{background:rgba(139,69,19,0.1);color:var(--primary)}
+.actions .edit:hover{background:var(--primary);color:#fff}
+.actions .del{background:rgba(220,53,69,0.1);color:var(--danger)}
+.actions .del:hover{background:var(--danger);color:#fff}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;display:none;align-items:flex-end;justify-content:center;padding:0}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:92vh;max-height:92dvh;overflow-y:auto;padding:22px 22px calc(22px + env(safe-area-inset-bottom));position:relative;-webkit-overflow-scrolling:touch}
+.modal h2{font-family:'Oswald',sans-serif;font-size:1.25rem;margin-bottom:18px;letter-spacing:.5px;padding-right:36px}
+.modal-close{position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.06);border:none;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.empty{text-align:center;padding:36px 10px;color:var(--muted);font-size:.9rem}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--primary);color:#fff;padding:14px 20px;border-radius:12px;font-size:.85rem;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.5px;max-width:calc(100% - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.mobile-menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:1050;background:#fff;border:1px solid var(--border);width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.08);font-size:1.1rem;color:var(--text);cursor:pointer}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1050;opacity:0;visibility:hidden;transition:.25s}
+.sidebar-overlay.show{opacity:1;visibility:visible}
+.badge{font-size:.7rem;font-weight:700;background:var(--accent);color:var(--text);padding:4px 10px;border-radius:6px;white-space:nowrap}
+@media(max-width:768px){
+  .mobile-menu-btn{display:flex}
+  .sidebar{transform:translateX(-100%);width:min(280px,85vw)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:16px;padding-top:68px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:12px}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;max-height:92vh;max-height:92dvh;padding:18px 18px calc(18px + env(safe-area-inset-bottom))}
+  .card{padding:16px}
+  .table-wrap{margin:0 -16px;padding:0 16px}
+  .table-wrap>table{margin:0 -16px;min-width:560px}
+  .actions button{padding:10px 12px}
+}
+@media(max-width:400px){
+  .stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU BTN -->
+<button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú"><i class="fas fa-bars"></i></button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- LOGIN -->
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <h1>LA DELICIA</h1>
+    <p>Panel de administración — DEMO</p>
+    <form id="login-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" required placeholder="admin@ladelicia.bo" value="admin@ladelicia.bo">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-password" required placeholder="••••••••" value="admin123">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px">
+        <i class="fas fa-sign-in-alt"></i> Ingresar (Demo)
+      </button>
+    </form>
+    <p style="margin-top:16px;font-size:0.72rem;color:var(--muted);text-align:center">
+      <strong>Demo local:</strong> Usá cualquier email y contraseña para ingresar
+    </p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-view" class="app hidden">
+  <div class="demo-banner">MODO DEMO — Los cambios no se guardan permanentemente</div>
+  <aside class="sidebar">
+    <h2>LA DELICIA</h2>
+    <ul class="sidebar-nav">
+      <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      <li><a href="#" data-section="store"><i class="fas fa-store"></i> Tienda</a></li>
+      <li><a href="#" data-section="hero"><i class="fas fa-images"></i> Portada</a></li>
+      <li><a href="#" data-section="categories"><i class="fas fa-tags"></i> Categorías</a></li>
+      <li><a href="#" data-section="promotions"><i class="fas fa-percent"></i> Promociones</a></li>
+      <li><a href="#" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
+      <li><a href="#" data-section="branches"><i class="fas fa-map-marker-alt"></i> Sucursales</a></li>
+      <li><a href="#" data-section="facilities"><i class="fas fa-industry"></i> Instalaciones</a></li>
+      <li><a href="#" data-section="appearance" style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px"><i class="fas fa-palette"></i> Apariencia</a></li>
+      <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
+      <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+    </ul>
+  </aside>
+  <main class="main">
+    <div id="section-dashboard"></div>
+    <div id="section-store" class="hidden"></div>
+    <div id="section-hero" class="hidden"></div>
+    <div id="section-categories" class="hidden"></div>
+    <div id="section-promotions" class="hidden"></div>
+    <div id="section-products" class="hidden"></div>
+    <div id="section-branches" class="hidden"></div>
+    <div id="section-facilities" class="hidden"></div>
+    <div id="section-appearance" class="hidden"></div>
+    <div id="section-settings" class="hidden"></div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="Admin.closeModal()"><i class="fas fa-times"></i></button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== DEMO DATA ====================
+const demoData = {
+  store: {
+    store_name: 'LA DELICIA',
+    tagline: 'Panadería Artesanal',
+    story: 'LA DELICIA nació del amor por el buen pan...',
+    mission: 'Endulzar y acompañar cada momento...',
+    vision: 'Ser la panadería artesanal líder...',
+    values: 'Amor por lo artesanal...',
+    hours: 'Lun – Dom: 6:00 – 21:00',
+    address: 'Yacuiba, Bolivia',
+    email: 'pedidos@ladelicia.bo',
+    instagram: '@ladelicia.bo',
+    phone: '59169340915'
+  },
+  hero: [
+    { id: 1, src: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800', title: 'LA DELICIA', subtitle: 'Pan artesanal recién horneado', sort_order: 1, active: 1 },
+    { id: 2, src: 'https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=800', title: 'LA DELICIA', subtitle: 'Facturas y delicias dulces', sort_order: 2, active: 1 },
+    { id: 3, src: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800', title: 'LA DELICIA', subtitle: 'Tortas para toda ocasión', sort_order: 3, active: 1 }
+  ],
+  categories: [
+    { id: 'panes', name: 'Panes', slug: 'panes', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400', tagline: 'Recién horneado', sort_order: 1, active: 1 },
+    { id: 'especiales', name: 'Panes Especiales', slug: 'especiales', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=400', tagline: 'Para toda ocasión', sort_order: 2, active: 1 },
+    { id: 'molde', name: 'Panes Molde', slug: 'molde', image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13aa?w=400', tagline: 'Suaves y esponjosos', sort_order: 3, active: 1 },
+    { id: 'hamburguesa', name: 'Pan Hamburguesas', slug: 'hamburguesa', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400', tagline: 'Para tus comidas', sort_order: 4, active: 1 },
+    { id: 'chatitas', name: 'Chatitas', slug: 'chatitas', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400', tagline: 'Crujientes y deliciosas', sort_order: 5, active: 1 },
+    { id: 'integrales', name: 'Integrales', slug: 'integrales', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400', tagline: 'Saludables y ricos', sort_order: 6, active: 1 }
+  ],
+  promotions: [
+    { id: 1, badge: 'FRESCO', title: 'Pan Caliente', sub: 'Recién horneado cada mañana', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600', cat_id: 'panes', full_description: 'Disfruta de nuestro pan recién horneado...', valid_until: 'Todos los días desde las 6:00 AM', conditions: ['Precio por unidad', 'Delivery disponible'], active: 1 },
+    { id: 2, badge: 'DULCE', title: 'Tortas para Cumpleaños', sub: 'Encarga tu torta personalizada', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600', cat_id: 'especiales', full_description: 'Tortas artesanales para toda ocasión...', valid_until: 'Consultar por encargo', conditions: ['Pedido con 24h'], active: 1 }
+  ],
+  products: [
+    { id: 1, sku: 'LD-PAN-001', name: 'Pan Con Queso', brand: 'LA DELICIA', price: 5, cat_id: 'panes', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400', images: '["https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400"]', description: '<p>Delicioso pan con queso...</p>', details: '{"Presentación": "Bolsa 6 Unidades", "Sabor": "Queso"}', stock: 50, active: 1 },
+    { id: 2, sku: 'LD-PAN-002', name: 'Chamillo', brand: 'LA DELICIA', price: 5, cat_id: 'panes', img: 'https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=400', images: '["https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=400"]', description: '<p>El clásico Chamillo...</p>', details: '{"Presentación": "Bolsa 6 Unidades"}', stock: 50, active: 1 },
+    { id: 3, sku: 'LD-CHA-010', name: 'Chatita Chica', brand: 'LA DELICIA', price: 8, cat_id: 'chatitas', img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400', images: '["https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400"]', description: '<p>Chatitas chicas...</p>', details: '{"Presentación": "Bolsa 250g"}', stock: 30, active: 1 }
+  ],
+  branches: [
+    { id: 1, name: 'LA DELICIA — Casa Matriz', location: 'Yacuiba', initials: 'CM', address: 'Av. Principal #123', phone: '69340915', whatsapp: '59169340915', hours: 'Lun – Dom: 6:00 – 21:00', facebook: 'https://facebook.com/ladelicia.bo', instagram: 'https://instagram.com/ladelicia.bo', active: 1 },
+    { id: 2, name: 'LA DELICIA — Sucursal', location: 'Yacuiba', initials: 'SU', address: 'Calle Comercio #456', phone: '69340915', whatsapp: '59169340915', hours: 'Lun – Dom: 6:00 – 21:00', facebook: 'https://facebook.com/ladelicia.bo', instagram: 'https://instagram.com/ladelicia.bo', active: 1 }
+  ],
+  facilities: [
+    { id: 1, label: 'Fachada de la Panadería', icon: 'fas fa-store', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600', description: 'Así luce nuestra panadería por fuera.', sort_order: 1, active: 1 },
+    { id: 2, label: 'Vitrina de Productos', icon: 'fas fa-cookie-bite', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=600', description: 'Exhibición de nuestras delicias.', sort_order: 2, active: 1 },
+    { id: 3, label: 'Entrada Principal', icon: 'fas fa-door-open', image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13aa?w=600', description: 'Bienvenido a LA DELICIA.', sort_order: 3, active: 1 }
+  ]
+};
+
+// Inicializar store_config desde objeto
+let storeConfig = { ...demoData.store };
+
+// ==================== ADMIN DEMO ====================
+const Admin = {
+  currentSection: 'dashboard',
+  _productFilterQ: '',
+  _productFilterCat: 'all',
+  _productFilterActive: 'all',
+
+  init() {
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.showAdmin();
+    });
+    document.getElementById('logout-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.logout();
+    });
+    document.querySelectorAll('.sidebar-nav a[data-section]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.navigate(link.dataset.section);
+      });
+    });
+  },
+
+  login() {
+    this.showAdmin();
+  },
+
+  logout() {
+    document.getElementById('login-view').classList.remove('hidden');
+    document.getElementById('admin-view').classList.add('hidden');
+  },
+
+  showAdmin() {
+    document.getElementById('login-view').classList.add('hidden');
+    document.getElementById('admin-view').classList.remove('hidden');
+    this.navigate('dashboard');
+  },
+
+  navigate(section) {
+    this.currentSection = section;
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.section === section));
+    ['dashboard','store','hero','categories','promotions','products','branches','facilities','appearance','settings'].forEach(s => {
+      const el = document.getElementById('section-' + s);
+      if (el) el.classList.toggle('hidden', s !== section);
+    });
+    this.renderSection(section);
+  },
+
+  renderSection(section) {
+    switch(section) {
+      case 'dashboard': this.renderDashboard(); break;
+      case 'store': this.renderStore(); break;
+      case 'hero': this.renderHero(); break;
+      case 'categories': this.renderCategories(); break;
+      case 'promotions': this.renderPromotions(); break;
+      case 'products': this.renderProducts(); break;
+      case 'branches': this.renderBranches(); break;
+      case 'facilities': this.renderFacilities(); break;
+      case 'appearance': this.renderAppearance(); break;
+      case 'settings': this.renderSettings(); break;
+    }
+  },
+
+  // DASHBOARD
+  renderDashboard() {
+    const container = document.getElementById('section-dashboard');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Dashboard</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">${demoData.products.length}</div><div class="stat-label">Productos</div></div>
+        <div class="stat"><div class="stat-value">${demoData.categories.length}</div><div class="stat-label">Categorías</div></div>
+        <div class="stat"><div class="stat-value">${demoData.promotions.length}</div><div class="stat-label">Promociones</div></div>
+        <div class="stat"><div class="stat-value">${demoData.branches.length}</div><div class="stat-label">Sucursales</div></div>
+      </div>
+      <div class="card">
+        <h3>Accesos rápidos</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="Admin.navigate('products')"><i class="fas fa-plus"></i> Nuevo producto</button>
+          <button class="btn btn-accent" onclick="Admin.navigate('categories')"><i class="fas fa-tags"></i> Categorías</button>
+          <button class="btn btn-primary" onclick="Admin.navigate('promotions')"><i class="fas fa-percent"></i> Promociones</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Información</h3>
+        <p style="color:var(--muted);font-size:0.85rem;line-height:1.6">
+          Estás en modo <strong>DEMO</strong>. Los cambios que hagas no se guardan permanentemente.<br>
+          Cuando conectes Supabase, todos los datos se sincronizarán automáticamente.
+        </p>
+      </div>
+    `;
+  },
+
+  // STORE CONFIG
+  renderStore() {
+    const container = document.getElementById('section-store');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Configuración de la Tienda</h2>
+      <div class="card">
+        <form id="store-form">
+          <div class="form-group"><label>Nombre de la tienda</label><input name="store_name" value="${storeConfig.store_name || 'LA DELICIA'}"></div>
+          <div class="form-group"><label>Eslogan</label><input name="tagline" value="${storeConfig.tagline || 'Panadería Artesanal'}"></div>
+          <div class="form-group"><label>Historia</label><textarea name="story">${storeConfig.story || ''}</textarea></div>
+          <div class="form-group"><label>Misión</label><textarea name="mission">${storeConfig.mission || ''}</textarea></div>
+          <div class="form-group"><label>Visión</label><textarea name="vision">${storeConfig.vision || ''}</textarea></div>
+          <div class="form-group"><label>Valores</label><textarea name="values">${storeConfig.values || ''}</textarea></div>
+          <div class="form-group"><label>Horario</label><input name="hours" value="${storeConfig.hours || ''}"></div>
+          <div class="form-group"><label>Dirección</label><input name="address" value="${storeConfig.address || ''}"></div>
+          <div class="form-group"><label>Email</label><input name="email" value="${storeConfig.email || ''}"></div>
+          <div class="form-group"><label>Instagram</label><input name="instagram" value="${storeConfig.instagram || ''}"></div>
+          <div class="form-group"><label>WhatsApp</label><input name="phone" value="${storeConfig.phone || ''}"></div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+        </form>
+      </div>
+    `;
+    document.getElementById('store-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const entries = Object.fromEntries(fd.entries());
+      Object.assign(storeConfig, entries);
+      this.toast('Configuración guardada (demo)');
+    });
+  },
+
+  // HERO SLIDES
+  renderHero() {
+    const container = document.getElementById('section-hero');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Portada / Carrusel</h2>
+      <div class="card">
+        <h3>Slides <button class="btn btn-primary btn-sm" onclick="Admin.openHeroModal()"><i class="fas fa-plus"></i> Agregar</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Título</th><th>Subtítulo</th><th>Orden</th><th>Acciones</th></tr></thead>
+          <tbody>${demoData.hero.map(s => `
+            <tr>
+              <td><img src="${s.src}" style="width:60px;height:40px;object-fit:cover;border-radius:4px"></td>
+              <td>${s.title}</td><td>${s.subtitle}</td><td>${s.sort_order}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openHeroModal(${s.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteHero(${s.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  openHeroModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? demoData.hero.find(s => s.id === id) : null;
+    this.openModal(isEdit ? 'Editar slide' : 'Nuevo slide', `
+      <form id="hero-form">
+        <div class="form-group"><label>Título</label><input name="title" value="${row?.title || ''}" required></div>
+        <div class="form-group"><label>Subtítulo</label><input name="subtitle" value="${row?.subtitle || ''}" required></div>
+        <div class="form-group"><label>URL imagen</label><input name="src" value="${row?.src || ''}" required placeholder="https://..."></div>
+        <div class="form-group"><label>Orden</label><input type="number" name="sort_order" value="${row?.sort_order || 0}"></div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('hero-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        Object.assign(demoData.hero.find(s => s.id === id), data);
+      } else {
+        demoData.hero.push({ id: Date.now(), ...data, active: 1 });
+      }
+      this.closeModal();
+      this.renderHero();
+      this.toast('Guardado (demo)');
+    });
+  },
+
+  deleteHero(id) {
+    if (!confirm('¿Eliminar este slide?')) return;
+    demoData.hero = demoData.hero.filter(s => s.id !== id);
+    this.renderHero();
+    this.toast('Eliminado (demo)');
+  },
+
+  // CATEGORÍAS
+  renderCategories() {
+    const container = document.getElementById('section-categories');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Categorías</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openCategoryModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Nombre</th><th>Slug</th><th>Tagline</th><th>Acciones</th></tr></thead>
+          <tbody>${demoData.categories.map(c => `
+            <tr>
+              <td>${c.image ? `<img src="${c.image}" style="width:50px;height:50px;object-fit:cover;border-radius:6px">` : '-'}</td>
+              <td>${c.name}</td><td>${c.slug}</td><td>${c.tagline || '-'}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openCategoryModal('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteCategory('${c.id}')"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  openCategoryModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? demoData.categories.find(c => c.id === id) : null;
+    this.openModal(isEdit ? 'Editar categoría' : 'Nueva categoría', `
+      <form id="cat-form">
+        <div class="form-group"><label>Nombre</label><input name="name" value="${row?.name || ''}" required></div>
+        <div class="form-group"><label>Slug (URL)</label><input name="slug" value="${row?.slug || ''}" required placeholder="panes"></div>
+        <div class="form-group"><label>Tagline</label><input name="tagline" value="${row?.tagline || ''}" placeholder="Recién horneado"></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}"></div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('cat-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        Object.assign(demoData.categories.find(c => c.id === id), data);
+      } else {
+        demoData.categories.push({ id: Date.now().toString(), ...data, sort_order: demoData.categories.length + 1, active: 1 });
+      }
+      this.closeModal(); this.renderCategories(); this.toast('Guardado (demo)');
+    });
+  },
+
+  deleteCategory(id) {
+    if (!confirm('¿Eliminar categoría?')) return;
+    demoData.categories = demoData.categories.filter(c => c.id !== id);
+    this.renderCategories();
+    this.toast('Eliminado (demo)');
+  },
+
+  // PROMOCIONES
+  renderPromotions() {
+    const container = document.getElementById('section-promotions');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Promociones</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openPromoModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Badge</th><th>Título</th><th>Sub</th><th>Acciones</th></tr></thead>
+          <tbody>${demoData.promotions.map(p => `
+            <tr>
+              <td><img src="${p.image}" style="width:60px;height:40px;object-fit:cover;border-radius:4px"></td>
+              <td><span class="badge">${p.badge}</span></td>
+              <td>${p.title}</td><td>${p.sub}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openPromoModal(${p.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deletePromo(${p.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  openPromoModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? demoData.promotions.find(p => p.id === id) : null;
+    this.openModal(isEdit ? 'Editar promoción' : 'Nueva promoción', `
+      <form id="promo-form">
+        <div class="form-group"><label>Badge</label><input name="badge" value="${row?.badge || ''}" required placeholder="FRESCO"></div>
+        <div class="form-group"><label>Título</label><input name="title" value="${row?.title || ''}" required></div>
+        <div class="form-group"><label>Subtítulo</label><input name="sub" value="${row?.sub || ''}" required></div>
+        <div class="form-group"><label>Categoría</label><select name="cat_id"><option value="">--</option>${demoData.categories.map(c=>`<option value="${c.id}" ${row?.cat_id==c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}" required></div>
+        <div class="form-group"><label>Descripción completa</label><textarea name="full_description">${row?.full_description || ''}</textarea></div>
+        <div class="form-group"><label>Vigencia</label><input name="valid_until" value="${row?.valid_until || ''}"></div>
+        <div class="form-group"><label>Condiciones (separadas por coma)</label><input name="conditions" value="${row?.conditions ? row.conditions.join(', ') : ''}"></div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('promo-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (data.conditions) data.conditions = data.conditions.split(',').map(s => s.trim());
+      if (isEdit) {
+        Object.assign(demoData.promotions.find(p => p.id === id), data);
+      } else {
+        demoData.promotions.push({ id: Date.now(), ...data, active: 1 });
+      }
+      this.closeModal(); this.renderPromotions(); this.toast('Guardado (demo)');
+    });
+  },
+
+  deletePromo(id) {
+    if (!confirm('¿Eliminar promoción?')) return;
+    demoData.promotions = demoData.promotions.filter(p => p.id !== id);
+    this.renderPromotions();
+    this.toast('Eliminado (demo)');
+  },
+
+  // CATEGORÍAS
+  renderCategories() {
+    const container = document.getElementById('section-categories');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Categorías</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openCategoryModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th>Orden</th><th>Imagen</th><th>Nombre</th><th>Slug</th><th>Tagline</th><th>Acciones</th></tr></thead>
+          <tbody>${demoData.categories.map((c, idx) => `
+            <tr>
+              <td style="white-space:nowrap">
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveCategoryDemo('${c.id}', -1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveCategoryDemo('${c.id}', 1)" ${idx === demoData.categories.length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+              </td>
+              <td>${c.image ? `<img src="${c.image}" style="width:50px;height:50px;object-fit:cover;border-radius:6px">` : '-'}</td>
+              <td>${c.name}</td><td>${c.slug}</td><td>${c.tagline || '-'}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openCategoryModal('${c.id}')"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteCategory('${c.id}')"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        </div>
+      </div>
+    `;
+  },
+
+  moveCategoryDemo(id, direction) {
+    const idx = demoData.categories.findIndex(c => c.id === id);
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= demoData.categories.length) return;
+    const current = demoData.categories[idx];
+    const target = demoData.categories[newIdx];
+    const tempSort = current.sort_order;
+    current.sort_order = target.sort_order;
+    target.sort_order = tempSort;
+    this.renderCategories();
+    this.toast('Orden actualizado (demo)');
+  },
+
+  // PRODUCTOS
+  renderProducts() {
+    const container = document.getElementById('section-products');
+    const q = this._productFilterQ || '';
+    const catId = this._productFilterCat || 'all';
+    const activeFilter = this._productFilterActive || 'all';
+    let list = demoData.products.slice();
+    if (catId !== 'all') list = list.filter(p => p.cat_id === catId);
+    if (activeFilter === 'active') list = list.filter(p => p.active);
+    else if (activeFilter === 'inactive') list = list.filter(p => !p.active);
+    if (q) list = list.filter(p => (p.name || '').toLowerCase().includes(q.toLowerCase()) || (p.sku || '').toLowerCase().includes(q.toLowerCase()));
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Productos</h2>
+      <div class="card" style="margin-bottom:18px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="search" id="prod-search" placeholder="Buscar por nombre o SKU..." value="${q}" style="flex:1;min-width:180px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff">
+          <select id="prod-filter-cat" style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff;min-height:44px">
+            <option value="all">Todas las categorías</option>
+            ${demoData.categories.map(c => `<option value="${c.id}" ${catId === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}
+          </select>
+          <select id="prod-filter-active" style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff;min-height:44px">
+            <option value="all" ${activeFilter === 'all' ? 'selected' : ''}>Todos los estados</option>
+            <option value="active" ${activeFilter === 'active' ? 'selected' : ''}>Activos</option>
+            <option value="inactive" ${activeFilter === 'inactive' ? 'selected' : ''}>Inactivos</option>
+          </select>
+          <button class="btn btn-primary" onclick="Admin.clearProductFilters()"><i class="fas fa-times"></i> Limpiar</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openProductModal()"><i class="fas fa-plus"></i> Nuevo</button></h3>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th>Orden</th><th>Imagen</th><th>SKU</th><th>Nombre</th><th>Precio</th><th>Categoría</th><th>Stock</th><th>Activo</th><th>Acciones</th></tr></thead>
+          <tbody>${list.map((p, idx) => {
+            const cat = demoData.categories.find(c => c.id === p.cat_id);
+            return `
+            <tr style="${p.active ? '' : 'opacity:0.6'}">
+              <td style="white-space:nowrap">
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveProductDemo(${p.id}, -1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveProductDemo(${p.id}, 1)" ${idx === list.length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+              </td>
+              <td>${p.img ? `<img src="${p.img}" style="width:50px;height:50px;object-fit:cover;border-radius:6px">` : '-'}</td>
+              <td><code style="font-size:0.72rem">${p.sku || '-'}</code></td>
+              <td>${p.name}</td>
+              <td><strong style="color:var(--primary)">Bs. ${p.price}</strong></td>
+              <td>${cat?.name || '-'}</td>
+              <td>${p.stock ?? 0}</td>
+              <td>
+                <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;min-height:44px">
+                  <input type="checkbox" ${p.active ? 'checked' : ''} onchange="Admin.toggleProductDemo(${p.id}, this.checked)" style="width:20px;height:20px;accent-color:var(--primary)">
+                  <span style="font-size:0.8rem">${p.active ? 'Sí' : 'No'}</span>
+                </label>
+              </td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openProductModal(${p.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `;}).join('')}</tbody>
+        </table>
+        </div>
+        ${!list.length ? '<p class="empty">No hay productos.</p>' : ''}
+      </div>
+    `;
+    setTimeout(() => {
+      const searchInput = document.getElementById('prod-search');
+      const catSelect = document.getElementById('prod-filter-cat');
+      const activeSelect = document.getElementById('prod-filter-active');
+      if (searchInput) searchInput.addEventListener('input', (e) => { this._productFilterQ = e.target.value; this.renderProducts(); });
+      if (catSelect) catSelect.addEventListener('change', (e) => { this._productFilterCat = e.target.value; this.renderProducts(); });
+      if (activeSelect) activeSelect.addEventListener('change', (e) => { this._productFilterActive = e.target.value; this.renderProducts(); });
+    }, 0);
+  },
+
+  clearProductFilters() {
+    this._productFilterQ = '';
+    this._productFilterCat = 'all';
+    this._productFilterActive = 'all';
+    this.renderProducts();
+  },
+
+  moveProductDemo(id, direction) {
+    const idx = demoData.products.findIndex(p => p.id === id);
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= demoData.products.length) return;
+    const current = demoData.products[idx];
+    const target = demoData.products[newIdx];
+    const tempSort = current.sort_order;
+    current.sort_order = target.sort_order;
+    target.sort_order = tempSort;
+    this.renderProducts();
+    this.toast('Orden actualizado (demo)');
+  },
+
+  toggleProductDemo(id, checked) {
+    const product = demoData.products.find(p => p.id === id);
+    if (product) {
+      product.active = checked ? 1 : 0;
+      this.renderProducts();
+      this.toast(checked ? 'Producto activado (demo)' : 'Producto desactivado (demo)');
+    }
+  },
+
+  openProductModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? demoData.products.find(p => p.id === id) : null;
+    const images = row?.images ? JSON.parse(row.images) : [];
+    this.openModal(isEdit ? 'Editar producto' : 'Nuevo producto', `
+      <form id="prod-form">
+        <div class="form-group"><label>SKU</label><input name="sku" value="${row?.sku || ''}" placeholder="LD-PAN-001"></div>
+        <div class="form-group"><label>Nombre</label><input name="name" value="${row?.name || ''}" required></div>
+        <div class="form-group"><label>Marca</label><input name="brand" value="${row?.brand || 'LA DELICIA'}"></div>
+        <div class="form-group"><label>Precio (Bs.)</label><input type="number" step="0.01" name="price" value="${row?.price || ''}" required></div>
+        <div class="form-group"><label>Categoría</label><select name="cat_id"><option value="">--</option>${demoData.categories.map(c=>`<option value="${c.id}" ${row?.cat_id==c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Stock</label><input type="number" name="stock" value="${row?.stock ?? 0}"></div>
+        <div class="form-group"><label>Descripción corta</label><input name="desc" value="${row?.desc || ''}"></div>
+        <div class="form-group"><label>Descripción HTML</label><textarea name="description">${row?.description || ''}</textarea></div>
+        <div class="form-group"><label>Detalles (JSON)</label><textarea name="details" placeholder='{"Presentación": "Bolsa 6 unidades"}'>${row?.details || ''}</textarea></div>
+        <div class="form-group"><label>URL imagen principal</label><input name="img" value="${row?.img || ''}"></div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('prod-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      data.price = parseFloat(data.price);
+      data.stock = parseInt(data.stock) || 0;
+      if (isEdit) {
+        Object.assign(demoData.products.find(p => p.id === id), data);
+      } else {
+        demoData.products.push({ id: Date.now(), ...data, images: data.img ? JSON.stringify([data.img]) : '[]', active: 1 });
+      }
+      this.closeModal(); this.renderProducts(); this.toast('Guardado (demo)');
+    });
+  },
+
+  deleteProduct(id) {
+    if (!confirm('¿Eliminar producto?')) return;
+    demoData.products = demoData.products.filter(p => p.id !== id);
+    this.renderProducts();
+    this.toast('Eliminado (demo)');
+  },
+
+  // SUCURSALES
+  renderBranches() {
+    const container = document.getElementById('section-branches');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Sucursales</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openBranchModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Nombre</th><th>Iniciales</th><th>Dirección</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+          <tbody>${demoData.branches.map(b => `
+            <tr>
+              <td><strong>${b.name}</strong><br><small style="color:var(--muted)">${b.location}</small></td>
+              <td>${b.initials}</td><td>${b.address}</td><td>${b.phone}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openBranchModal(${b.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteBranch(${b.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  openBranchModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? demoData.branches.find(b => b.id === id) : null;
+    this.openModal(isEdit ? 'Editar sucursal' : 'Nueva sucursal', `
+      <form id="branch-form">
+        <div class="form-group"><label>Nombre</label><input name="name" value="${row?.name || ''}" required></div>
+        <div class="form-group"><label>Ubicación</label><input name="location" value="${row?.location || ''}" required></div>
+        <div class="form-group"><label>Iniciales</label><input name="initials" value="${row?.initials || ''}" required placeholder="CM"></div>
+        <div class="form-group"><label>Dirección</label><input name="address" value="${row?.address || ''}" required></div>
+        <div class="form-group"><label>Teléfono</label><input name="phone" value="${row?.phone || ''}" required></div>
+        <div class="form-group"><label>WhatsApp</label><input name="whatsapp" value="${row?.whatsapp || ''}" required></div>
+        <div class="form-group"><label>Horario</label><input name="hours" value="${row?.hours || ''}" required></div>
+        <div class="form-group"><label>Facebook</label><input name="facebook" value="${row?.facebook || ''}"></div>
+        <div class="form-group"><label>Instagram</label><input name="instagram" value="${row?.instagram || ''}"></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}"></div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('branch-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        Object.assign(demoData.branches.find(b => b.id === id), data);
+      } else {
+        demoData.branches.push({ id: Date.now(), ...data, active: 1 });
+      }
+      this.closeModal(); this.renderBranches(); this.toast('Guardado (demo)');
+    });
+  },
+
+  deleteBranch(id) {
+    if (!confirm('¿Eliminar sucursal?')) return;
+    demoData.branches = demoData.branches.filter(b => b.id !== id);
+    this.renderBranches();
+    this.toast('Eliminado (demo)');
+  },
+
+  // INSTALACIONES
+  renderFacilities() {
+    const container = document.getElementById('section-facilities');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Instalaciones</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openFacilityModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Label</th><th>Icono</th><th>Descripción</th><th>Acciones</th></tr></thead>
+          <tbody>${demoData.facilities.map(f => `
+            <tr>
+              <td><img src="${f.image}" style="width:60px;height:40px;object-fit:cover;border-radius:4px"></td>
+              <td>${f.label}</td><td><i class="${f.icon}"></i></td><td>${f.description || '-'}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openFacilityModal(${f.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteFacility(${f.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  openFacilityModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? demoData.facilities.find(f => f.id === id) : null;
+    this.openModal(isEdit ? 'Editar instalación' : 'Nueva instalación', `
+      <form id="facility-form">
+        <div class="form-group"><label>Label</label><input name="label" value="${row?.label || ''}" required></div>
+        <div class="form-group"><label>Icono (FontAwesome)</label><input name="icon" value="${row?.icon || 'fas fa-store'}" required placeholder="fas fa-store"></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}" required></div>
+        <div class="form-group"><label>Descripción</label><textarea name="description">${row?.description || ''}</textarea></div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('facility-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        Object.assign(demoData.facilities.find(f => f.id === id), data);
+      } else {
+        demoData.facilities.push({ id: Date.now(), ...data, sort_order: demoData.facilities.length + 1, active: 1 });
+      }
+      this.closeModal(); this.renderFacilities(); this.toast('Guardado (demo)');
+    });
+  },
+
+  deleteFacility(id) {
+    if (!confirm('¿Eliminar instalación?')) return;
+    demoData.facilities = demoData.facilities.filter(f => f.id !== id);
+    this.renderFacilities();
+    this.toast('Eliminado (demo)');
+  },
+
+  // APARIENCIA
+  renderAppearance() {
+    const container = document.getElementById('section-appearance');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Apariencia</h2>
+      <div class="card">
+        <h3>Colores</h3>
+        <form id="appearance-form">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+            <div class="form-group"><label>Color primario</label><input name="primary" value="#8B4513" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color primario oscuro</label><input name="primary_dark" value="#6B3410" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color acento</label><input name="accent" value="#F5B400" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color fondo</label><input name="bg" value="#FFFBF5" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color superficie</label><input name="surface" value="#FDF5E6" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color texto</label><input name="text" value="#2C1810" type="color" style="height:48px;padding:4px"></div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:8px"><i class="fas fa-save"></i> Guardar colores</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Logo</h3>
+        <form id="logo-form">
+          <div class="form-group"><label>URL del logo</label><input name="logo_url" value="" placeholder="https://..."></div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar logo</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Tipografía</h3>
+        <form id="font-form">
+          <div class="form-group"><label>Fuente principal (Google Fonts)</label><input name="font_main" value="Inter" placeholder="Inter, Roboto, etc."></div>
+          <div class="form-group"><label>Fuente títulos (Google Fonts)</label><input name="font_headings" value="Oswald" placeholder="Oswald, Montserrat, etc."></div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar tipografía</button>
+        </form>
+      </div>
+    `;
+    const applyDemo = (formId) => {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        this.toast('Guardado (demo)');
+      };
+    };
+    applyDemo('appearance-form');
+    applyDemo('logo-form');
+    applyDemo('font-form');
+  },
+
+  // SETTINGS
+  renderSettings() {
+    const container = document.getElementById('section-settings');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Configuración</h2>
+      <div class="card">
+        <h3>Conexión con Supabase</h3>
+        <p style="color:var(--muted);font-size:0.85rem;line-height:1.6;margin-bottom:16px">
+          Para conectar con Supabase, editá los archivos <code>public/index.html</code> y <code>public/admin.html</code><br>
+          y reemplazá <code>TU_SUPABASE_URL</code> y <code>TU_SUPABASE_ANON_KEY</code> por tus credenciales.
+        </p>
+        <p style="color:var(--muted);font-size:0.85rem;line-height:1.6">
+          Ver la guía completa en <code>README.md</code>
+        </p>
+      </div>
+    `;
+  },
+
+  // UTILIDADES
+  openModal(title, content) {
+    document.getElementById('modal-content').innerHTML = `<h2>${title}</h2>${content}`;
+    document.getElementById('modal-overlay').classList.add('show');
+  },
+
+  closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+  },
+
+  toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+};
+
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-overlay') Admin.closeModal();
+});
+
+const sidebarDemo = document.querySelector('.sidebar');
+const sidebarOverlayDemo = document.getElementById('sidebar-overlay');
+const mobileMenuBtnDemo = document.getElementById('mobile-menu-btn');
+
+function openSidebarDemo() {
+  sidebarDemo.classList.add('open');
+  sidebarOverlayDemo.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebarDemo() {
+  sidebarDemo.classList.remove('open');
+  sidebarOverlayDemo.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+if (mobileMenuBtnDemo) {
+  mobileMenuBtnDemo.addEventListener('click', () => {
+    if (sidebarDemo.classList.contains('open')) closeSidebarDemo();
+    else openSidebarDemo();
+  });
+}
+
+if (sidebarOverlayDemo) {
+  sidebarOverlayDemo.addEventListener('click', closeSidebarDemo);
+}
+
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebarDemo();
+  });
+});
+
+Admin.init();
+</script>
+</body>
+</html>

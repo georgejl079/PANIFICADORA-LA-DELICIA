@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LA DELICIA — Panel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#8B4513;--primary-dark:#6B3410;--accent:#F5B400;--bg:#FFFBF5;--surface:#FDF5E6;--text:#2C1810;--dim:#6B5B4F;--muted:#9A8A7A;--border:#E8D9C5;--success:#25D366;--danger:#dc3545;--warning:#F5B400;--sidebar-w:260px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;overscroll-behavior:none}
+.app{display:flex;min-height:100vh;min-height:100dvh}
+.sidebar{width:var(--sidebar-w);background:var(--primary);color:#fff;padding:20px 0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:1100;transition:transform .25s ease;will-change:transform}
+.sidebar h2{font-family:'Oswald',sans-serif;font-size:1.25rem;letter-spacing:3px;padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,0.15);margin-bottom:6px}
+.sidebar-nav{list-style:none;padding:6px 0}
+.sidebar-nav li a{display:flex;align-items:center;gap:12px;padding:13px 20px;color:rgba(255,255,255,0.9);text-decoration:none;font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;min-height:48px}
+.sidebar-nav li a:hover,.sidebar-nav li a.active{background:rgba(255,255,255,0.08);color:#fff;border-left-color:var(--accent)}
+.sidebar-nav li a i{width:20px;text-align:center;font-size:.95rem}
+.main{flex:1;padding:20px;margin-left:var(--sidebar-w);min-width:0}
+.login-wrap{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,0.08);border:1px solid var(--border)}
+.login-card h1{font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:6px;letter-spacing:2px}
+.login-card p{color:var(--muted);font-size:.85rem;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:6px;font-family:'Oswald',sans-serif}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;background:#fff;transition:border .2s;min-height:44px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary)}
+.form-group textarea{resize:vertical;min-height:100px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border:none;border-radius:10px;font-family:'Oswald',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-decoration:none;min-height:44px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-accent{background:var(--accent);color:var(--text)}
+.btn-accent:hover{background:#e0a200}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-sm{padding:8px 12px;font-size:.72rem;min-height:36px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:18px;border:1px solid var(--border)}
+.card h3{font-family:'Oswald',sans-serif;font-size:1.05rem;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.stat{background:#fff;border-radius:14px;padding:18px;border:1px solid var(--border)}
+.stat-value{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;color:var(--primary)}
+.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:0 18px}
+.table-wrap>table{margin:0 -18px;min-width:640px}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-family:'Oswald',sans-serif;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;white-space:nowrap;background:#fff}
+tr:hover{background:var(--surface)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{padding:8px 10px;border:none;border-radius:8px;cursor:pointer;font-size:.8rem;transition:all .2s;min-height:36px;min-width:36px;display:inline-flex;align-items:center;justify-content:center}
+.actions .edit{background:rgba(139,69,19,0.1);color:var(--primary)}
+.actions .edit:hover{background:var(--primary);color:#fff}
+.actions .del{background:rgba(220,53,69,0.1);color:var(--danger)}
+.actions .del:hover{background:var(--danger);color:#fff}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;display:none;align-items:flex-end;justify-content:center;padding:0}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:92vh;max-height:92dvh;overflow-y:auto;padding:22px 22px calc(22px + env(safe-area-inset-bottom));position:relative;-webkit-overflow-scrolling:touch}
+.modal h2{font-family:'Oswald',sans-serif;font-size:1.25rem;margin-bottom:18px;letter-spacing:.5px;padding-right:36px}
+.modal-close{position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.06);border:none;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.empty{text-align:center;padding:36px 10px;color:var(--muted);font-size:.9rem}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--primary);color:#fff;padding:14px 20px;border-radius:12px;font-size:.85rem;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.5px;max-width:calc(100% - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.mobile-menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:1050;background:#fff;border:1px solid var(--border);width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.08);font-size:1.1rem;color:var(--text);cursor:pointer}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1050;opacity:0;visibility:hidden;transition:.25s}
+.sidebar-overlay.show{opacity:1;visibility:visible}
+.badge{font-size:.7rem;font-weight:700;background:var(--accent);color:var(--text);padding:4px 10px;border-radius:6px;white-space:nowrap}
+@media(max-width:768px){
+  .mobile-menu-btn{display:flex}
+  .sidebar{transform:translateX(-100%);width:min(280px,85vw)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:16px;padding-top:68px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:12px}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;max-height:92vh;max-height:92dvh;padding:18px 18px calc(18px + env(safe-area-inset-bottom))}
+  .card{padding:16px}
+  .table-wrap{margin:0 -16px;padding:0 16px}
+  .table-wrap>table{margin:0 -16px;min-width:560px}
+  .actions button{padding:10px 12px}
+}
+@media(max-width:400px){
+  .stats{grid-template-columns:1fr}
+}
+</style>
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU BTN -->
+<button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú"><i class="fas fa-bars"></i></button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- LOGIN -->
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <h1>LA DELICIA</h1>
+    <p>Panel de administración</p>
+    <form id="login-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" required placeholder="admin@ladelicia.bo">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px">
+        <i class="fas fa-sign-in-alt"></i> Ingresar
+      </button>
+    </form>
+    <p style="margin-top:16px;font-size:0.72rem;color:var(--muted);text-align:center">
+      Acceso restringido — Solo personal autorizado
+    </p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-view" class="app hidden">
+  <aside class="sidebar">
+    <h2>LA DELICIA</h2>
+    <ul class="sidebar-nav">
+      <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      <li><a href="#" data-section="store"><i class="fas fa-store"></i> Tienda</a></li>
+      <li><a href="#" data-section="hero"><i class="fas fa-images"></i> Portada</a></li>
+      <li><a href="#" data-section="categories"><i class="fas fa-tags"></i> Categorías</a></li>
+      <li><a href="#" data-section="promotions"><i class="fas fa-percent"></i> Promociones</a></li>
+      <li><a href="#" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
+      <li><a href="#" data-section="branches"><i class="fas fa-map-marker-alt"></i> Sucursales</a></li>
+      <li><a href="#" data-section="facilities"><i class="fas fa-industry"></i> Instalaciones</a></li>
+      <li><a href="#" data-section="appearance" style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px"><i class="fas fa-palette"></i> Apariencia</a></li>
+      <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+    </ul>
+  </aside>
+  <main class="main">
+    <div id="section-dashboard"></div>
+    <div id="section-store" class="hidden"></div>
+    <div id="section-hero" class="hidden"></div>
+    <div id="section-categories" class="hidden"></div>
+    <div id="section-promotions" class="hidden"></div>
+    <div id="section-products" class="hidden"></div>
+    <div id="section-branches" class="hidden"></div>
+    <div id="section-facilities" class="hidden"></div>
+    <div id="section-appearance" class="hidden"></div>
+      </main>
+</div>
+
+<!-- MODAL GENÉRICO -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="Admin.closeModal()"><i class="fas fa-times"></i></button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://qqudcfguwckzjaluoane.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_YA7lYZdEqByRs5HWE1kVUg_dx9uFSuf';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+function escapeHtml(text) {
+  if (text == null) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+const Admin = {
+  session: null,
+  currentSection: 'dashboard',
+  cache: {},
+  _productFilterQ: '',
+  _productFilterCat: 'all',
+  _productFilterActive: 'all',
+
+  async init() {
+    const session = await supabaseClient.auth.getSession();
+    if (session.data.session) {
+      this.session = session.data.session;
+      this.showAdmin();
+    }
+    this.bindEvents();
+  },
+
+  bindEvents() {
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.login();
+    });
+    document.getElementById('logout-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.logout();
+    });
+    document.querySelectorAll('.sidebar-nav a[data-section]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const section = link.dataset.section;
+        this.navigate(section);
+      });
+    });
+  },
+
+  async login() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) { this.toast('Credenciales incorrectas', 'error'); return; }
+    this.session = data.session;
+    this.showAdmin();
+  },
+
+  async logout() {
+    await supabaseClient.auth.signOut();
+    this.session = null;
+    document.getElementById('login-view').classList.remove('hidden');
+    document.getElementById('admin-view').classList.add('hidden');
+  },
+
+  showAdmin() {
+    document.getElementById('login-view').classList.add('hidden');
+    document.getElementById('admin-view').classList.remove('hidden');
+    this.navigate('dashboard');
+  },
+
+  navigate(section) {
+    this.currentSection = section;
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.section === section));
+    ['dashboard','store','hero','categories','promotions','products','branches','facilities','appearance'].forEach(s => {
+      const el = document.getElementById('section-' + s);
+      if (el) el.classList.toggle('hidden', s !== section);
+    });
+    this.renderSection(section);
+  },
+
+  async renderSection(section) {
+    switch(section) {
+      case 'dashboard': await this.renderDashboard(); break;
+      case 'store': await this.renderStore(); break;
+      case 'hero': await this.renderHero(); break;
+      case 'categories': await this.renderCategories(); break;
+      case 'promotions': await this.renderPromotions(); break;
+      case 'products': await this.renderProducts(); break;
+      case 'branches': await this.renderBranches(); break;
+      case 'facilities': await this.renderFacilities(); break;
+      case 'appearance': await this.renderAppearance(); break;
+    }
+  },
+
+  // DASHBOARD
+  async renderDashboard() {
+    const container = document.getElementById('section-dashboard');
+    const [products, categories, promotions, branches] = await Promise.all([
+      this.from('products').select('*', { count: 'exact' }),
+      this.from('categories').select('*', { count: 'exact' }),
+      this.from('promotions').select('*', { count: 'exact' }),
+      this.from('branches').select('*', { count: 'exact' })
+    ]);
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Dashboard</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">${products.count || 0}</div><div class="stat-label">Productos</div></div>
+        <div class="stat"><div class="stat-value">${categories.count || 0}</div><div class="stat-label">Categorías</div></div>
+        <div class="stat"><div class="stat-value">${promotions.count || 0}</div><div class="stat-label">Promociones</div></div>
+        <div class="stat"><div class="stat-value">${branches.count || 0}</div><div class="stat-label">Sucursales</div></div>
+      </div>
+      <div class="card">
+        <h3>Accesos rápidos</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="Admin.navigate('products')"><i class="fas fa-plus"></i> Nuevo producto</button>
+          <button class="btn btn-accent" onclick="Admin.navigate('categories')"><i class="fas fa-tags"></i> Categorías</button>
+          <button class="btn btn-primary" onclick="Admin.navigate('promotions')"><i class="fas fa-percent"></i> Promociones</button>
+        </div>
+      </div>
+    `;
+  },
+
+  // STORE CONFIG
+  async renderStore() {
+    const container = document.getElementById('section-store');
+    const { data } = await this.from('store_config').select('*');
+    const config = data ? data.reduce((acc, row) => { acc[row.key] = row.value; return acc; }, {}) : {};
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Configuración de la Tienda</h2>
+      <div class="card">
+        <form id="store-form">
+          <div class="form-group"><label>Nombre de la tienda</label><input name="store_name" value="${config.store_name || 'LA DELICIA'}"></div>
+          <div class="form-group"><label>Eslogan</label><input name="tagline" value="${config.tagline || 'Panadería Artesanal'}"></div>
+          <div class="form-group"><label>Historia</label><textarea name="story">${config.story || ''}</textarea></div>
+          <div class="form-group"><label>Misión</label><textarea name="mission">${config.mission || ''}</textarea></div>
+          <div class="form-group"><label>Visión</label><textarea name="vision">${config.vision || ''}</textarea></div>
+          <div class="form-group"><label>Valores</label><textarea name="values">${config.values || ''}</textarea></div>
+          <div class="form-group"><label>Horario</label><input name="hours" value="${config.hours || ''}"></div>
+          <div class="form-group"><label>Dirección</label><input name="address" value="${config.address || ''}"></div>
+          <div class="form-group"><label>Email</label><input name="email" value="${config.email || ''}"></div>
+          <div class="form-group"><label>Instagram</label><input name="instagram" value="${config.instagram || ''}"></div>
+          <div class="form-group"><label>WhatsApp</label><input name="phone" value="${config.phone || ''}"></div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+        </form>
+      </div>
+    `;
+    document.getElementById('store-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const entries = Object.fromEntries(fd.entries());
+      for (const [key, value] of Object.entries(entries)) {
+        await this.from('store_config').upsert({ key, value, type: 'text' }, { onConflict: 'key' });
+      }
+      this.toast('Configuración guardada');
+    });
+  },
+
+  // HERO SLIDES
+  async renderHero() {
+    const container = document.getElementById('section-hero');
+    const { data } = await this.from('hero_slides').select('*').order('sort_order');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Portada / Carrusel</h2>
+      <div class="card">
+        <h3>Slides <button class="btn btn-primary btn-sm" onclick="Admin.openHeroModal()"><i class="fas fa-plus"></i> Agregar</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Título</th><th>Subtítulo</th><th>Orden</th><th>Acciones</th></tr></thead>
+          <tbody>${(data || []).map(s => `
+            <tr>
+              <td><img src="${s.src}" style="width:60px;height:40px;object-fit:cover;border-radius:4px"></td>
+              <td>${s.title}</td><td>${s.subtitle}</td><td>${s.sort_order}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openHeroModal(${s.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteHero(${s.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        ${!data?.length ? '<p class="empty">No hay slides. Agregá el primero.</p>' : ''}
+      </div>
+    `;
+  },
+
+  async openHeroModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? (await this.from('hero_slides').select('*').eq('id', id).single()).data : null;
+    this.openModal(isEdit ? 'Editar slide' : 'Nuevo slide', `
+      <form id="hero-form">
+        <div class="form-group"><label>Título</label><input name="title" value="${row?.title || ''}" required></div>
+        <div class="form-group"><label>Subtítulo</label><input name="subtitle" value="${row?.subtitle || ''}" required></div>
+        <div class="form-group"><label>URL imagen</label><input name="src" value="${row?.src || ''}" required placeholder="https://... o subir abajo"></div>
+        <div class="form-group"><label>Orden</label><input type="number" name="sort_order" value="${row?.sort_order || 0}"></div>
+        <div class="form-group">
+          <label>O subir imagen</label>
+          <div class="upload-zone" onclick="document.getElementById('hero-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click para subir imagen</p>
+          </div>
+          <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'hero', 'slides')">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('hero-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        await this.from('hero_slides').update(data).eq('id', id);
+      } else {
+        await this.from('hero_slides').insert([data]);
+      }
+      this.closeModal();
+      this.renderHero();
+      this.toast('Guardado');
+    });
+  },
+
+  async deleteHero(id) {
+    if (!confirm('¿Eliminar este slide?')) return;
+    await this.from('hero_slides').delete().eq('id', id);
+    this.renderHero();
+    this.toast('Eliminado');
+  },
+
+  // CATEGORÍAS
+  async renderCategories() {
+    const container = document.getElementById('section-categories');
+    const { data } = await this.from('categories').select('*').order('sort_order');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Categorías</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openCategoryModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th>Orden</th><th>Imagen</th><th>Nombre</th><th>Slug</th><th>Tagline</th><th>Acciones</th></tr></thead>
+          <tbody>${(data || []).map((c, idx) => `
+            <tr>
+              <td style="white-space:nowrap">
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveCategory(${c.id}, -1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveCategory(${c.id}, 1)" ${idx === (data||[]).length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+              </td>
+              <td>${c.image ? `<img src="${c.image}" style="width:50px;height:50px;object-fit:cover;border-radius:6px">` : '-'}</td>
+              <td>${c.name}</td><td>${c.slug}</td><td>${c.tagline || '-'}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openCategoryModal(${c.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteCategory(${c.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        </div>
+        ${!data?.length ? '<p class="empty">No hay categorías.</p>' : ''}
+      </div>
+    `;
+  },
+
+  async moveCategory(id, direction) {
+    const { data } = await this.from('categories').select('*').order('sort_order');
+    if (!data) return;
+    const idx = data.findIndex(c => c.id === id);
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= data.length) return;
+    const current = data[idx];
+    const target = data[newIdx];
+    await this.from('categories').update({ sort_order: target.sort_order }).eq('id', id);
+    await this.from('categories').update({ sort_order: current.sort_order }).eq('id', target.id);
+    this.renderCategories();
+    this.toast('Orden actualizado');
+  },
+
+  async openCategoryModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? (await this.from('categories').select('*').eq('id', id).single()).data : null;
+    this.openModal(isEdit ? 'Editar categoría' : 'Nueva categoría', `
+      <form id="cat-form">
+        <div class="form-group"><label>Nombre</label><input name="name" value="${row?.name || ''}" required></div>
+        <div class="form-group"><label>Slug (URL)</label><input name="slug" value="${row?.slug || ''}" required placeholder="panes"></div>
+        <div class="form-group"><label>Tagline</label><input name="tagline" value="${row?.tagline || ''}" placeholder="Recién horneado"></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}"></div>
+        <div class="form-group">
+          <label>O subir imagen</label>
+          <div class="upload-zone" onclick="document.getElementById('cat-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i><p>Click para subir</p>
+          </div>
+          <input type="file" id="cat-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'categories', '${isEdit ? row.id : 'new'}')">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('cat-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        await this.from('categories').update(data).eq('id', id);
+      } else {
+        await this.from('categories').insert([data]);
+      }
+      this.closeModal(); this.renderCategories(); this.toast('Guardado');
+    });
+  },
+
+  async deleteCategory(id) {
+    if (!confirm('¿Eliminar categoría? Se eliminarán también los productos asociados.')) return;
+    await this.from('products').delete().eq('cat_id', id);
+    await this.from('categories').delete().eq('id', id);
+    this.renderCategories(); this.toast('Eliminado');
+  },
+
+  // PROMOCIONES
+  async renderPromotions() {
+    const container = document.getElementById('section-promotions');
+    const { data } = await this.from('promotions').select('*, categories(name)').order('id', { ascending: false });
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Promociones</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openPromoModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Badge</th><th>Título</th><th>Sub</th><th>Categoría</th><th>Acciones</th></tr></thead>
+          <tbody>${(data || []).map(p => `
+            <tr>
+              <td><img src="${p.image}" style="width:60px;height:40px;object-fit:cover;border-radius:4px"></td>
+              <td><span style="background:var(--accent);padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:700">${p.badge}</span></td>
+              <td>${p.title}</td><td>${p.sub}</td><td>${p.categories?.name || '-'}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openPromoModal(${p.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deletePromo(${p.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        ${!data?.length ? '<p class="empty">No hay promociones.</p>' : ''}
+      </div>
+    `;
+  },
+
+  async openPromoModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? (await this.from('promotions').select('*').eq('id', id).single()).data : null;
+    const { data: cats } = await this.from('categories').select('*').order('name');
+    this.openModal(isEdit ? 'Editar promoción' : 'Nueva promoción', `
+      <form id="promo-form">
+        <div class="form-group"><label>Badge</label><input name="badge" value="${row?.badge || ''}" required placeholder="FRESCO"></div>
+        <div class="form-group"><label>Título</label><input name="title" value="${row?.title || ''}" required></div>
+        <div class="form-group"><label>Subtítulo</label><input name="sub" value="${row?.sub || ''}" required></div>
+        <div class="form-group"><label>Categoría</label><select name="cat_id"><option value="">--</option>${(cats||[]).map(c=>`<option value="${c.id}" ${row?.cat_id==c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}" required></div>
+        <div class="form-group"><label>Descripción completa</label><textarea name="full_description">${row?.full_description || ''}</textarea></div>
+        <div class="form-group"><label>Vigencia</label><input name="valid_until" value="${row?.valid_until || ''}"></div>
+        <div class="form-group"><label>Condiciones (separadas por coma)</label><input name="conditions" value="${row?.conditions || ''}"></div>
+        <div class="form-group">
+          <label>O subir imagen</label>
+          <div class="upload-zone" onclick="document.getElementById('promo-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i><p>Click para subir</p>
+          </div>
+          <input type="file" id="promo-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'promotions', '${isEdit ? row.id : 'new'}')">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('promo-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (data.conditions) data.conditions = data.conditions.split(',').map(s => s.trim());
+      if (isEdit) {
+        await this.from('promotions').update(data).eq('id', id);
+      } else {
+        await this.from('promotions').insert([data]);
+      }
+      this.closeModal(); this.renderPromotions(); this.toast('Guardado');
+    });
+  },
+
+  async deletePromo(id) {
+    if (!confirm('¿Eliminar promoción?')) return;
+    await this.from('promotions').delete().eq('id', id);
+    this.renderPromotions(); this.toast('Eliminado');
+  },
+
+  // PRODUCTOS
+  async renderProducts() {
+    const container = document.getElementById('section-products');
+    const { data: cats } = await this.from('categories').select('*').order('name');
+    const filterCat = this._productFilterCat || 'all';
+    const filterActive = this._productFilterActive || 'all';
+    const filterQ = this._productFilterQ || '';
+    let query = this.from('products').select('*, categories(name)').order('sort_order');
+    if (filterCat !== 'all') query = query.eq('cat_id', filterCat);
+    if (filterActive === 'active') query = query.eq('active', 1);
+    else if (filterActive === 'inactive') query = query.eq('active', 0);
+    if (filterQ) query = query.or(`name.ilike.%${filterQ}%,sku.ilike.%${filterQ}%`);
+    const { data } = await query;
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Productos</h2>
+      <div class="card" style="margin-bottom:18px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="search" id="prod-search" placeholder="Buscar por nombre o SKU..." value="${filterQ}" style="flex:1;min-width:180px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff">
+          <select id="prod-filter-cat" style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff;min-height:44px">
+            <option value="all">Todas las categorías</option>
+            ${(cats||[]).map(c => `<option value="${c.id}" ${filterCat === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}
+          </select>
+          <select id="prod-filter-active" style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff;min-height:44px">
+            <option value="all" ${filterActive === 'all' ? 'selected' : ''}>Todos los estados</option>
+            <option value="active" ${filterActive === 'active' ? 'selected' : ''}>Activos</option>
+            <option value="inactive" ${filterActive === 'inactive' ? 'selected' : ''}>Inactivos</option>
+          </select>
+          <button class="btn btn-primary" onclick="Admin.clearProductFilters()"><i class="fas fa-times"></i> Limpiar</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openProductModal()"><i class="fas fa-plus"></i> Nuevo</button></h3>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th>Orden</th><th>Imagen</th><th>SKU</th><th>Nombre</th><th>Precio</th><th>Categoría</th><th>Stock</th><th>Activo</th><th>Acciones</th></tr></thead>
+          <tbody>${(data || []).map((p, idx) => `
+            <tr style="${p.active ? '' : 'opacity:0.6'}">
+              <td style="white-space:nowrap">
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveProduct(${p.id}, -1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+                <button class="btn btn-sm" style="padding:4px 8px" onclick="Admin.moveProduct(${p.id}, 1)" ${idx === (data||[]).length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+              </td>
+              <td>${p.img ? `<img src="${p.img}" style="width:50px;height:50px;object-fit:cover;border-radius:6px">` : '-'}</td>
+              <td><code style="font-size:0.72rem">${p.sku || '-'}</code></td>
+              <td>${p.name}</td>
+              <td><strong style="color:var(--primary)">Bs. ${p.price}</strong></td>
+              <td>${p.categories?.name || '-'}</td>
+              <td>${p.stock ?? 0}</td>
+              <td>
+                <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;min-height:44px">
+                  <input type="checkbox" ${p.active ? 'checked' : ''} onchange="Admin.toggleProduct(${p.id}, this.checked)" style="width:20px;height:20px;accent-color:var(--primary)">
+                  <span style="font-size:0.8rem">${p.active ? 'Sí' : 'No'}</span>
+                </label>
+              </td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openProductModal(${p.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        </div>
+        ${!data?.length ? '<p class="empty">No hay productos.</p>' : ''}
+      </div>
+    `;
+    setTimeout(() => {
+      const searchInput = document.getElementById('prod-search');
+      const catSelect = document.getElementById('prod-filter-cat');
+      const activeSelect = document.getElementById('prod-filter-active');
+      if (searchInput) searchInput.addEventListener('input', (e) => { this._productFilterQ = e.target.value; this.renderProducts(); });
+      if (catSelect) catSelect.addEventListener('change', (e) => { this._productFilterCat = e.target.value; this.renderProducts(); });
+      if (activeSelect) activeSelect.addEventListener('change', (e) => { this._productFilterActive = e.target.value; this.renderProducts(); });
+    }, 0);
+  },
+
+  clearProductFilters() {
+    this._productFilterQ = '';
+    this._productFilterCat = 'all';
+    this._productFilterActive = 'all';
+    this.renderProducts();
+  },
+
+  async openProductModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? (await this.from('products').select('*').eq('id', id).single()).data : null;
+    const { data: cats } = await this.from('categories').select('*').order('name');
+    const images = row?.images ? JSON.parse(row.images) : [];
+    this.openModal(isEdit ? 'Editar producto' : 'Nuevo producto', `
+      <form id="prod-form">
+        <div class="form-group"><label>SKU</label><input name="sku" value="${row?.sku || ''}" placeholder="LD-PAN-001"></div>
+        <div class="form-group"><label>Nombre</label><input name="name" value="${row?.name || ''}" required></div>
+        <div class="form-group"><label>Marca</label><input name="brand" value="${row?.brand || 'LA DELICIA'}"></div>
+        <div class="form-group"><label>Precio (Bs.)</label><input type="number" step="0.01" name="price" value="${row?.price || ''}" required></div>
+        <div class="form-group"><label>Categoría</label><select name="cat_id"><option value="">--</option>${(cats||[]).map(c=>`<option value="${c.id}" ${row?.cat_id==c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Stock</label><input type="number" name="stock" value="${row?.stock ?? 0}"></div>
+        <div class="form-group"><label>Descripción corta</label><input name="desc" value="${row?.desc || ''}"></div>
+        <div class="form-group"><label>Descripción HTML</label><textarea name="description">${row?.description || ''}</textarea></div>
+        <div class="form-group"><label>Detalles (JSON)</label><textarea name="details" placeholder='{"Presentación": "Bolsa 6 unidades"}'>${row?.details || ''}</textarea></div>
+        <div class="form-group"><label>URL imagen principal</label><input name="img" value="${row?.img || ''}"></div>
+        <div class="form-group">
+          <label>O subir imagen</label>
+          <div class="upload-zone" onclick="document.getElementById('prod-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i><p>Click para subir</p>
+          </div>
+          <input type="file" id="prod-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'products', '${isEdit ? row.id : 'new'}')">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('prod-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      data.price = parseFloat(data.price);
+      data.stock = parseInt(data.stock) || 0;
+      if (data.details && !data.details.startsWith('{')) data.details = '{}';
+      if (isEdit) {
+        await this.from('products').update(data).eq('id', id);
+      } else {
+        await this.from('products').insert([data]);
+      }
+      this.closeModal(); this.renderProducts(); this.toast('Guardado');
+    });
+  },
+
+  async deleteProduct(id) {
+    if (!confirm('¿Eliminar producto?')) return;
+    await this.from('products').delete().eq('id', id);
+    this.renderProducts(); this.toast('Eliminado');
+  },
+
+  async moveProduct(id, direction) {
+    const { data } = await this.from('products').select('*').order('sort_order');
+    if (!data) return;
+    const idx = data.findIndex(p => p.id === id);
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= data.length) return;
+    const current = data[idx];
+    const target = data[newIdx];
+    await this.from('products').update({ sort_order: target.sort_order }).eq('id', id);
+    await this.from('products').update({ sort_order: current.sort_order }).eq('id', target.id);
+    this.renderProducts();
+    this.toast('Orden actualizado');
+  },
+
+  async toggleProduct(id, checked) {
+    await this.from('products').update({ active: checked ? 1 : 0 }).eq('id', id);
+    this.renderProducts();
+    this.toast(checked ? 'Producto activado' : 'Producto desactivado');
+  },
+
+  // SUCURSALES
+  async renderBranches() {
+    const container = document.getElementById('section-branches');
+    const { data } = await this.from('branches').select('*').order('sort_order');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Sucursales</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openBranchModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Nombre</th><th>Iniciales</th><th>Dirección</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+          <tbody>${(data || []).map(b => `
+            <tr>
+              <td><strong>${b.name}</strong><br><small style="color:var(--muted)">${b.location}</small></td>
+              <td>${b.initials}</td><td>${b.address}</td><td>${b.phone}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openBranchModal(${b.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteBranch(${b.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        ${!data?.length ? '<p class="empty">No hay sucursales.</p>' : ''}
+      </div>
+    `;
+  },
+
+  async openBranchModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? (await this.from('branches').select('*').eq('id', id).single()).data : null;
+    this.openModal(isEdit ? 'Editar sucursal' : 'Nueva sucursal', `
+      <form id="branch-form">
+        <div class="form-group"><label>Nombre</label><input name="name" value="${row?.name || ''}" required></div>
+        <div class="form-group"><label>Ubicación</label><input name="location" value="${row?.location || ''}" required></div>
+        <div class="form-group"><label>Iniciales</label><input name="initials" value="${row?.initials || ''}" required placeholder="CM"></div>
+        <div class="form-group"><label>Dirección</label><input name="address" value="${row?.address || ''}" required></div>
+        <div class="form-group"><label>Teléfono</label><input name="phone" value="${row?.phone || ''}" required></div>
+        <div class="form-group"><label>WhatsApp</label><input name="whatsapp" value="${row?.whatsapp || ''}" required></div>
+        <div class="form-group"><label>Horario</label><input name="hours" value="${row?.hours || ''}" required></div>
+        <div class="form-group"><label>Facebook</label><input name="facebook" value="${row?.facebook || ''}"></div>
+        <div class="form-group"><label>Instagram</label><input name="instagram" value="${row?.instagram || ''}"></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}"></div>
+        <div class="form-group">
+          <label>O subir imagen</label>
+          <div class="upload-zone" onclick="document.getElementById('branch-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i><p>Click para subir</p>
+          </div>
+          <input type="file" id="branch-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'branches', '${isEdit ? row.id : 'new'}')">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('branch-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        await this.from('branches').update(data).eq('id', id);
+      } else {
+        await this.from('branches').insert([data]);
+      }
+      this.closeModal(); this.renderBranches(); this.toast('Guardado');
+    });
+  },
+
+  async deleteBranch(id) {
+    if (!confirm('¿Eliminar sucursal?')) return;
+    await this.from('branches').delete().eq('id', id);
+    this.renderBranches(); this.toast('Eliminado');
+  },
+
+  // INSTALACIONES
+  async renderFacilities() {
+    const container = document.getElementById('section-facilities');
+    const { data } = await this.from('facilities').select('*').order('sort_order');
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Instalaciones</h2>
+      <div class="card">
+        <h3>Lista <button class="btn btn-primary btn-sm" onclick="Admin.openFacilityModal()"><i class="fas fa-plus"></i> Nueva</button></h3>
+        <table>
+          <thead><tr><th>Imagen</th><th>Label</th><th>Icono</th><th>Descripción</th><th>Acciones</th></tr></thead>
+          <tbody>${(data || []).map(f => `
+            <tr>
+              <td><img src="${f.image}" style="width:60px;height:40px;object-fit:cover;border-radius:4px"></td>
+              <td>${f.label}</td><td><i class="${f.icon}"></i></td><td>${f.description || '-'}</td>
+              <td class="actions">
+                <button class="edit" onclick="Admin.openFacilityModal(${f.id})"><i class="fas fa-edit"></i></button>
+                <button class="del" onclick="Admin.deleteFacility(${f.id})"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+        ${!data?.length ? '<p class="empty">No hay instalaciones.</p>' : ''}
+      </div>
+    `;
+  },
+
+  async openFacilityModal(id) {
+    const isEdit = !!id;
+    const row = isEdit ? (await this.from('facilities').select('*').eq('id', id).single()).data : null;
+    this.openModal(isEdit ? 'Editar instalación' : 'Nueva instalación', `
+      <form id="facility-form">
+        <div class="form-group"><label>Label</label><input name="label" value="${row?.label || ''}" required></div>
+        <div class="form-group"><label>Icono (FontAwesome)</label><input name="icon" value="${row?.icon || 'fas fa-store'}" required placeholder="fas fa-store"></div>
+        <div class="form-group"><label>URL imagen</label><input name="image" value="${row?.image || ''}" required></div>
+        <div class="form-group"><label>Descripción</label><textarea name="description">${row?.description || ''}</textarea></div>
+        <div class="form-group">
+          <label>O subir imagen</label>
+          <div class="upload-zone" onclick="document.getElementById('facility-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i><p>Click para subir</p>
+          </div>
+          <input type="file" id="facility-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'facilities', '${isEdit ? row.id : 'new'}')">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+      </form>
+    `);
+    document.getElementById('facility-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      if (isEdit) {
+        await this.from('facilities').update(data).eq('id', id);
+      } else {
+        await this.from('facilities').insert([data]);
+      }
+      this.closeModal(); this.renderFacilities(); this.toast('Guardado');
+    });
+  },
+
+  async deleteFacility(id) {
+    if (!confirm('¿Eliminar instalación?')) return;
+    await this.from('facilities').delete().eq('id', id);
+    this.renderFacilities(); this.toast('Eliminado');
+  },
+
+  // APARIENCIA
+  async renderAppearance() {
+    const container = document.getElementById('section-appearance');
+    const { data } = await this.from('store_appearance').select('*');
+    const appearance = data ? data.reduce((acc, row) => { acc[row.key] = row.value; return acc; }, {}) : {};
+    container.innerHTML = `
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.6rem;margin-bottom:24px;letter-spacing:1px">Apariencia</h2>
+      <div class="card">
+        <h3>Colores</h3>
+        <form id="appearance-form">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+            <div class="form-group"><label>Color primario</label><input name="primary" value="${appearance.primary || '#8B4513'}" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color primario oscuro</label><input name="primary_dark" value="${appearance.primary_dark || '#6B3410'}" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color acento</label><input name="accent" value="${appearance.accent || '#F5B400'}" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color fondo</label><input name="bg" value="${appearance.bg || '#FFFBF5'}" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color superficie</label><input name="surface" value="${appearance.surface || '#FDF5E6'}" type="color" style="height:48px;padding:4px"></div>
+            <div class="form-group"><label>Color texto</label><input name="text" value="${appearance.text || '#2C1810'}" type="color" style="height:48px;padding:4px"></div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:8px"><i class="fas fa-save"></i> Guardar colores</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Logo</h3>
+        <form id="logo-form">
+          <div class="form-group"><label>URL del logo</label><input name="logo_url" value="${appearance.logo_url || ''}" placeholder="https://..."></div>
+          <div class="form-group">
+            <label>O subir logo</label>
+            <div class="upload-zone" onclick="document.getElementById('logo-file').click()">
+              <i class="fas fa-cloud-upload-alt"></i><p>Click para subir logo</p>
+            </div>
+            <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="Admin.uploadImage(this, 'appearance', 'logo')">
+          </div>
+          ${appearance.logo_url ? `<img src="${appearance.logo_url}" style="max-height:120px;object-fit:contain;border-radius:8px;margin-top:12px">` : ''}
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar logo</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Tipografía</h3>
+        <form id="font-form">
+          <div class="form-group"><label>Fuente principal (Google Fonts)</label><input name="font_main" value="${appearance.font_main || 'Inter'}" placeholder="Inter, Roboto, etc."></div>
+          <div class="form-group"><label>Fuente títulos (Google Fonts)</label><input name="font_headings" value="${appearance.font_headings || 'Oswald'}" placeholder="Oswald, Montserrat, etc."></div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar tipografía</button>
+        </form>
+      </div>
+    `;
+    document.getElementById('appearance-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      for (const [key, value] of Object.fromEntries(fd.entries())) {
+        await this.from('store_appearance').upsert({ key, value, type: 'color' }, { onConflict: 'key' });
+      }
+      this.toast('Colores guardados');
+    });
+    document.getElementById('logo-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const entries = Object.fromEntries(fd.entries());
+      if (entries.logo_url) {
+        await this.from('store_appearance').upsert({ key: 'logo_url', value: entries.logo_url, type: 'text' }, { onConflict: 'key' });
+      }
+      this.toast('Logo guardado');
+      this.renderAppearance();
+    });
+    document.getElementById('font-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const entries = Object.fromEntries(fd.entries());
+      for (const [key, value] of Object.entries(entries)) {
+        await this.from('store_appearance').upsert({ key, value, type: 'text' }, { onConflict: 'key' });
+      }
+      this.toast('Tipografía guardada');
+    });
+  },
+
+
+  // UTILIDADES
+  from(table) {
+    return supabaseClient.from(table);
+  },
+
+  openModal(title, content) {
+    document.getElementById('modal-content').innerHTML = `<h2>${title}</h2>${content}`;
+    document.getElementById('modal-overlay').classList.add('show');
+  },
+
+  closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+  },
+
+  toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  },
+
+  async uploadImage(input, folder, prefix) {
+    const file = input.files[0];
+    if (!file) return;
+    try {
+      const compressedBlob = await this.compressImage(file, 1200, 0.7);
+      const ext = compressedBlob.type === 'image/webp' ? 'webp' : 'jpg';
+      const path = `${folder}/${prefix}_${Date.now()}.${ext}`;
+      const { data, error } = await supabaseClient.storage.from('ladelicia-uploads').upload(path, compressedBlob, { cacheControl: '3600', upsert: false });
+      if (error) { this.toast('Error al subir imagen', 'error'); return; }
+      const { data: { publicUrl } } = supabaseClient.storage.from('ladelicia-uploads').getPublicUrl(data.path);
+      this.toast('Imagen optimizada y subida: ' + publicUrl);
+      const modal = document.getElementById('modal');
+      const urlInput = modal.querySelector('input[name="src"], input[name="image"], input[name="img"]');
+      if (urlInput) urlInput.value = publicUrl;
+    } catch (err) {
+      this.toast('Error al procesar imagen', 'error');
+    }
+  },
+
+  compressImage(file, maxWidth = 1200, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Error al comprimir imagen'));
+          }, 'image/jpeg', quality);
+        };
+        img.onerror = () => reject(new Error('Error al cargar imagen'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('Error al leer archivo'));
+      reader.readAsDataURL(file);
+    });
+  },
+};
+
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-overlay') Admin.closeModal();
+});
+
+const sidebar = document.querySelector('.sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  sidebarOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) closeSidebar();
+    else openSidebar();
+  });
+}
+
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener('click', closeSidebar);
+}
+
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+Admin.init();
+</script>
+</body>
+</html>
