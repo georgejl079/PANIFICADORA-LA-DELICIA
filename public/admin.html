@@ -520,10 +520,13 @@ const Admin = {
       const fd = new FormData(e.target);
       const data = Object.fromEntries(fd.entries());
       if (data.conditions) data.conditions = data.conditions.split(',').map(s => s.trim());
+      data.cat_id = data.cat_id ? parseInt(data.cat_id, 10) : null;
       if (isEdit) {
-        await this.from('promotions').update(data).eq('id', id);
+        const { error } = await this.from('promotions').update(data).eq('id', id);
+        if (error) { this.toast('Error al actualizar: ' + error.message, 'error'); return; }
       } else {
-        await this.from('promotions').insert([data]);
+        const { error } = await this.from('promotions').insert([data]);
+        if (error) { this.toast('Error al crear: ' + error.message, 'error'); return; }
       }
       this.closeModal(); this.renderPromotions(); this.toast('Guardado');
     });
@@ -650,10 +653,13 @@ const Admin = {
       data.price = parseFloat(data.price);
       data.stock = parseInt(data.stock) || 0;
       if (data.details && !data.details.startsWith('{')) data.details = '{}';
+      data.cat_id = data.cat_id ? parseInt(data.cat_id, 10) : null;
       if (isEdit) {
-        await this.from('products').update(data).eq('id', id);
+        const { error } = await this.from('products').update(data).eq('id', id);
+        if (error) { this.toast('Error al actualizar: ' + error.message, 'error'); return; }
       } else {
-        await this.from('products').insert([data]);
+        const { error } = await this.from('products').insert([data]);
+        if (error) { this.toast('Error al crear: ' + error.message, 'error'); return; }
       }
       this.closeModal(); this.renderProducts(); this.toast('Guardado');
     });

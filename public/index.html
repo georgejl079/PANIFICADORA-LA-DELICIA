@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#8B4513">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>LA DELICIA | Panadería Artesanal – Pan fresco y delicias horneadas</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1496,8 +1497,8 @@ const App = {
     this.data.store = store;
     this.data.hero = heroRes.data || [];
     this.data.categories = catRes.data || [];
-    this.data.promotions = promoRes.data || [];
-    this.data.products = (prodRes.data || []).filter(p => p.active !== 0);
+    this.data.promotions = (promoRes.data || []).map(p => ({ ...p, cat_id: p.cat_id ? Number(p.cat_id) : null }));
+    this.data.products = (prodRes.data || []).filter(p => p.active !== 0).map(p => ({ ...p, cat_id: p.cat_id ? Number(p.cat_id) : null }));
     this.data.branches = branchRes.data || [];
     this.data.facilities = facRes.data || [];
     const appearance = (appearanceRes.data || []).reduce((acc, row) => { acc[row.key] = row.value; return acc; }, {});
@@ -1824,7 +1825,7 @@ const App = {
       document.getElementById('shop-categories').style.display = 'none';
       document.getElementById('shop-categories').innerHTML = '';
       document.getElementById('shop-grid').style.display = '';
-      const data = this.data.products.filter(p => p.cat_id === cat);
+      const data = this.data.products.filter(p => p.cat_id === Number(cat));
       this.renderGrid('shop-grid', data);
       document.getElementById('shop-count').textContent = '(' + data.length + ' productos)';
     }
