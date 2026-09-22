@@ -979,6 +979,7 @@ body.desktop.product-open .pd-sticky-bar { bottom: 0; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .empty { text-align: center; padding: 48px 20px; color: var(--muted); grid-column: 1 / -1; }
 
+.wa-float-wrap.hidden { display: none !important; }
 .wa-float-wrap {
   position: fixed;
   right: 16px;
@@ -1604,6 +1605,8 @@ const App = {
     document.querySelectorAll('.tab').forEach(t => {
       t.classList.toggle('active', t.dataset.view === view);
     });
+    const waWrap = document.getElementById('wa-float-wrap');
+    if (waWrap) waWrap.classList.toggle('hidden', view !== 'home');
     if (view === 'shop') {
       if (opts.cat) this.filter(opts.cat);
       else this.renderShopGrid();
