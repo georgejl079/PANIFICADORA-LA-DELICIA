@@ -927,7 +927,7 @@ const Admin = {
     if (!file) return;
     try {
       const compressedBlob = await this.compressImage(file, 1200, 0.7);
-      const ext = compressedBlob.type === 'image/webp' ? 'webp' : 'jpg';
+      const ext = compressedBlob.type === 'image/png' ? 'png' : (compressedBlob.type === 'image/webp' ? 'webp' : 'jpg');
       const path = `${folder}/${prefix}_${Date.now()}.${ext}`;
       const { data, error } = await supabaseClient.storage.from('ladelicia-uploads').upload(path, compressedBlob, { cacheControl: '3600', upsert: false });
       if (error) { this.toast('Error al subir imagen', 'error'); return; }
@@ -958,10 +958,11 @@ const Admin = {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
+          const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
           canvas.toBlob((blob) => {
             if (blob) resolve(blob);
             else reject(new Error('Error al comprimir imagen'));
-          }, 'image/jpeg', quality);
+          }, mimeType, quality);
         };
         img.onerror = () => reject(new Error('Error al cargar imagen'));
         img.src = e.target.result;
