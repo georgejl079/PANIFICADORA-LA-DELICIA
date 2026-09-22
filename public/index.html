@@ -979,6 +979,104 @@ body.desktop.product-open .pd-sticky-bar { bottom: 0; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .empty { text-align: center; padding: 48px 20px; color: var(--muted); grid-column: 1 / -1; }
 
+.pf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 2700;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+.pf-modal-overlay.show { opacity: 1; visibility: visible; }
+.pf-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  width: min(520px, 92vw);
+  max-height: 88vh;
+  max-height: 88dvh;
+  background: #fff;
+  border-radius: 16px;
+  z-index: 2750;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+}
+.pf-modal.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+.pf-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.08);
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pf-modal-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  background: var(--surface);
+}
+.pf-modal-body {
+  padding: 18px 18px 22px;
+  overflow-y: auto;
+}
+.pf-modal-cat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-family: 'Oswald', sans-serif;
+}
+.pf-modal-title {
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  font-family: 'Oswald', sans-serif;
+}
+.pf-modal-desc {
+  font-size: 0.9rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+@media (max-width: 768px) {
+  .pf-modal {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    border-radius: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .pf-modal.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .wa-float-wrap.hidden { display: none !important; }
 .wa-float-wrap {
   position: fixed;
