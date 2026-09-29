@@ -246,73 +246,65 @@ body.product-open #view-product { display: block !important; }
 }
 .hero-slide .hero-caption {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 40px 20px 24px;
-  background: linear-gradient(to top, rgba(44,24,16,0.85) 0%, rgba(44,24,16,0.4) 50%, transparent 100%);
-  color: #fff;
-  z-index: 2;
-  text-align: center;
-}
-.hero-slide .hero-caption h2 {
-  font-size: 1.8rem;
-  letter-spacing: 3px;
-  margin-bottom: 6px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  color: #fff;
-}
-.hero-slide .hero-caption p {
-  font-size: 0.85rem;
-  opacity: 0.95;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-family: 'Oswald', sans-serif;
-  color: var(--accent-light);
-}
-body.desktop .hero-slide {
-  background-size: cover;
-  background-position: center;
-}
-body.desktop .hero-slide::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: inherit;
-  background-size: cover;
-  background-position: center;
-  filter: blur(50px) brightness(0.5) saturate(1.3);
-  transform: scale(1.4);
-  z-index: 0;
-}
-body.desktop .hero-slide::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(165deg, rgba(139,69,19,0.55) 0%, rgba(44,24,16,0.6) 100%);
-  z-index: 0;
-}
-body.desktop .hero-slide img {
-  position: relative;
-  z-index: 1;
-  object-fit: contain;
-  box-sizing: border-box;
-  padding: 26px;
-  filter: drop-shadow(0 22px 34px rgba(0,0,0,0.5));
-  opacity: 0;
-  transform: scale(0.94);
-  transition: opacity 0.8s ease 0.15s, transform 0.9s cubic-bezier(0.22,0.85,0.3,1) 0.15s;
-}
-body.desktop .hero-slide.active img { opacity: 1; transform: scale(1); }
-body.desktop .hero-slide .hero-caption {
-  background: none;
-  bottom: auto;
+  left: 6%;
+  right: 6%;
   top: 50%;
   transform: translateY(-50%);
-  padding: 0 40px;
+  z-index: 2;
+  color: #fff;
+  max-width: 540px;
 }
-body.desktop .hero-slide .hero-caption h2 { font-size: 3.5rem; letter-spacing: 8px; }
-body.desktop .hero-slide .hero-caption p { font-size: 1rem; letter-spacing: 3px; }
+.hero-caption .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  color: var(--primary-dark);
+  border-radius: 4px;
+  font: 800 .62rem/1 'Oswald',sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 16px rgba(245,180,0,.5);
+}
+.hero-caption h2 {
+  font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+  line-height: 1;
+  margin-bottom: 12px;
+  letter-spacing: .5px;
+  text-shadow: 0 4px 20px rgba(0,0,0,.6);
+  color: #fff;
+}
+.hero-caption p {
+  max-width: 440px;
+  font-size: clamp(.78rem, 1.4vw, .92rem);
+  line-height: 1.5;
+  color: rgba(255,255,255,.95);
+  margin-bottom: 18px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+.hero-cta {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: var(--primary-dark);
+  padding: 12px 22px;
+  border-radius: 6px;
+  font: 800 .78rem 'Oswald',sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(245,180,0,.5);
+  transition: transform .2s, box-shadow .2s, filter .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-cta:hover {
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 26px rgba(245,180,0,.7);
+}
 .hero-dots {
   position: absolute;
   bottom: 12px;
@@ -325,34 +317,74 @@ body.desktop .hero-slide .hero-caption p { font-size: 1rem; letter-spacing: 3px;
 .hero-dot {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,.5);
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: background 0.2s, width 0.2s;
+  transition: background .2s, width .2s;
 }
-.hero-dot.active { background: #fff; width: 20px; border-radius: 4px; }
-.section-title {
-  padding: 24px 16px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+.hero-dot.active{ background: var(--accent); box-shadow: 0 0 12px var(--accent); width: 22px; border-radius: 4px; }
+.home-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
 }
-.section-title h2 { font-size: 1.4rem; letter-spacing: 1.5px; }
-.section-title span { font-size: 0.75rem; color: var(--dim); }
-.link-btn {
-  background: none; border: none;
-  color: var(--primary);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: 'Oswald', sans-serif;
-  letter-spacing: 1px;
+.feature-card {
   display: flex;
   align-items: center;
-  gap: 5px;
-  white-space: nowrap;
+  gap: 12px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(139,69,19,.08);
+}
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.feature-text strong {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--text);
+}
+.feature-text span {
+  font-size: .72rem;
+  color: var(--muted);
+}
+.section-title h2 {
+  font-size: 1.35rem;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+}
+.section-title h2::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 45px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(245,180,0,.5);
+}
+.section-title span {
+  font-size: 0.8rem;
+  color: var(--dim);
+  font-weight: 600;
 }
 .link-btn i { font-size: 0.65rem; }
 .cat-section { border-top: 1px solid var(--border); }
@@ -1269,6 +1301,18 @@ body.product-open .wa-float-wrap {
     max-width: 1200px;
     aspect-ratio: 2/1;
   }
+  .hero-slide .hero-caption {
+    left: 8%;
+    right: auto;
+    max-width: 640px;
+  }
+  .hero-caption h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); }
+  .home-features {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 16px;
+    grid-template-columns: repeat(4, 1fr);
+  }
   .section-title {
     max-width: 1200px;
     margin-left: auto;
@@ -1333,6 +1377,23 @@ body.product-open .wa-float-wrap {
   .cart-panel { max-width: 440px; }
   .toast { bottom: 32px; }
   body.product-open #app-header { display: block !important; }
+  .hero-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(44,24,16,.75) 0%, rgba(44,24,16,.35) 60%, transparent 100%);
+    z-index: 0;
+  }
+  .hero-slide img {
+    position: relative;
+    z-index: 1;
+    object-fit: cover;
+    filter: brightness(1.05);
+  }
+  .hero-slide .hero-caption {
+    background: none;
+    text-align: left;
+  }
 }
 .header-desktop { display: none; }
 @media (max-width: 768px) {
@@ -1394,16 +1455,34 @@ body.product-open .wa-float-wrap {
 </aside>
 <main id="view-home" class="view active">
   <div class="hero-carousel" id="hero-carousel"></div>
+  <div class="home-features">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-bread-slice"></i></div>
+      <div class="feature-text"><strong>Receta artesanal</strong><span>Hecho con tradición</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-truck"></i></div>
+      <div class="feature-text"><strong>Delivery</strong><span>Rápido y seguro</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fab fa-whatsapp"></i></div>
+      <div class="feature-text"><strong>WhatsApp</strong><span>Atención directa</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-percent"></i></div>
+      <div class="feature-text"><strong>Promociones</strong><span>Ofertas de la semana</span></div>
+    </div>
+  </div>
   <div class="section-title">
     <div><h2>Promociones</h2><span>Ofertas de la semana</span></div>
   </div>
   <div class="promo-scroll" id="home-promos"></div>
   <div class="section-title">
-    <div><h2>Categorías</h2></div>
+    <div><h2>Categorías</h2><span>Ver catálogo</span></div>
     <button type="button" class="link-btn" onclick="App.go('shop')">Ver catálogo</button>
   </div>
   <div class="cat-scroll" id="home-cats"></div>
-  <div class="section-title"><h2>Productos destacados</h2></div>
+  <div class="section-title"><h2>Productos destacados</h2><span>Nuestros favoritos</span></div>
   <div class="grid" id="home-featured"></div>
 </main>
 <main id="view-shop" class="view">
@@ -2101,8 +2180,12 @@ const App = {
       `<div class="hero-slide${i === 0 ? ' active' : ''}" style="background-image:url('${slide.src}')">
         <img src="${slide.src}" alt="${slide.title} — ${slide.subtitle}" loading="${i === 0 ? 'eager' : 'lazy'}">
         <div class="hero-caption">
+          <div class="eyebrow">LA DELICIA</div>
           <h2>${slide.title}</h2>
           <p>${slide.subtitle}</p>
+          <button type="button" class="hero-cta" onclick="App.go('shop')">
+            <i class="fas fa-shopping-bag"></i> Ver productos
+          </button>
         </div>
       </div>`
     ).join('') +
