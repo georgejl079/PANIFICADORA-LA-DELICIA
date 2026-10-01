@@ -305,25 +305,6 @@ body.product-open #view-product { display: block !important; }
   filter: brightness(1.08);
   box-shadow: 0 10px 26px rgba(245,180,0,.7);
 }
-.hero-dots {
-  position: absolute;
-  bottom: 12px;
-  left: 0; right: 0;
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  z-index: 3;
-}
-.hero-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.5);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: background .2s, width .2s;
-}
-.hero-dot.active{ background: var(--accent); box-shadow: 0 0 12px var(--accent); width: 22px; border-radius: 4px; }
 .home-features {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -2203,10 +2184,7 @@ const App = {
           </button>
         </div>
       </div>`
-    ).join('') +
-    `<div class="hero-dots">${this.data.hero.map((_, i) =>
-      `<button type="button" class="hero-dot${i === 0 ? ' active' : ''}" data-idx="${i}" onclick="App.goToHeroSlide(${i})" aria-label="Ver imagen ${i + 1}"></button>`
-    ).join('')}</div>`;
+    ).join('');
     this.heroIndex = 0;
     this.startHeroAutoplay();
   },
@@ -2221,7 +2199,6 @@ const App = {
   goToHeroSlide(idx, fromAutoplay) {
     this.heroIndex = idx;
     document.querySelectorAll('#hero-carousel .hero-slide').forEach((el, i) => el.classList.toggle('active', i === idx));
-    document.querySelectorAll('#hero-carousel .hero-dot').forEach((el, i) => el.classList.toggle('active', i === idx));
     if (!fromAutoplay) this.startHeroAutoplay();
   },
 
