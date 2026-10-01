@@ -162,11 +162,11 @@ tr:hover{background:var(--surface)}
 const demoData = {
   store: {
     store_name: 'LA DELICIA',
-    tagline: 'Panadería Artesanal',
+    tagline: 'Panificadora La Delicia - Los Mejores de la Ciudad',
     story: 'LA DELICIA nació del amor por el buen pan...',
     mission: 'Endulzar y acompañar cada momento...',
-    vision: 'Ser la panadería artesanal líder...',
-    values: 'Amor por lo artesanal...',
+    vision: 'Ser Panificadora La Delicia - Los Mejores de la Ciudad líder en Bolivia, reconocida por la excelencia de nuestros productos, la calidez de nuestro servicio y nuestro compromiso con la tradición y la innovación. Aspiramos a expandirnos y llegar a más familias, manteniendo siempre la esencia de Panificadora La Delicia - Los Mejores de la Ciudad y el calor de lo recién horneado.',
+    values: 'Amor por Panificadora La Delicia - Los Mejores de la Ciudad, compromiso con la calidad, cercanía con nuestros clientes, responsabilidad con nuestra comunidad y pasión por el buen pan. Creemos en el valor de Panificadora La Delicia - Los Mejores de la Ciudad y en el poder de compartir alrededor de la mesa.',
     hours: 'Lun – Dom: 6:00 – 21:00',
     address: 'Yacuiba, Bolivia',
     email: 'pedidos@ladelicia.bo',
@@ -174,7 +174,7 @@ const demoData = {
     phone: '59169340915'
   },
   hero: [
-    { id: 1, src: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800', title: 'LA DELICIA', subtitle: 'Pan artesanal recién horneado', sort_order: 1, active: 1 },
+    { id: 1, src: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800', title: 'LA DELICIA', subtitle: 'Panificadora La Delicia - Los Mejores de la Ciudad recién horneado', sort_order: 1, active: 1 },
     { id: 2, src: 'https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=800', title: 'LA DELICIA', subtitle: 'Facturas y delicias dulces', sort_order: 2, active: 1 },
     { id: 3, src: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800', title: 'LA DELICIA', subtitle: 'Tortas para toda ocasión', sort_order: 3, active: 1 }
   ],
@@ -188,7 +188,7 @@ const demoData = {
   ],
   promotions: [
     { id: 1, badge: 'FRESCO', title: 'Pan Caliente', sub: 'Recién horneado cada mañana', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600', cat_id: 'panes', full_description: 'Disfruta de nuestro pan recién horneado...', valid_until: 'Todos los días desde las 6:00 AM', conditions: ['Precio por unidad', 'Delivery disponible'], active: 1 },
-    { id: 2, badge: 'DULCE', title: 'Tortas para Cumpleaños', sub: 'Encarga tu torta personalizada', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600', cat_id: 'especiales', full_description: 'Tortas artesanales para toda ocasión...', valid_until: 'Consultar por encargo', conditions: ['Pedido con 24h'], active: 1 }
+    { id: 2, badge: 'DULCE', title: 'Tortas para Cumpleaños', sub: 'Encarga tu torta personalizada', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600', cat_id: 'especiales', full_description: 'Panificadora La Delicia - Los Mejores de la Ciudad para toda ocasión...', valid_until: 'Consultar por encargo', conditions: ['Pedido con 24h'], active: 1 }
   ],
   products: [
     { id: 1, sku: 'LD-PAN-001', name: 'Pan Con Queso', brand: 'LA DELICIA', price: 5, cat_id: 'panes', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400', images: '["https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400"]', description: '<p>Delicioso pan con queso...</p>', details: '{"Presentación": "Bolsa 6 Unidades", "Sabor": "Queso"}', stock: 50, active: 1 },
@@ -310,7 +310,7 @@ const Admin = {
       <div class="card">
         <form id="store-form">
           <div class="form-group"><label>Nombre de la tienda</label><input name="store_name" value="${storeConfig.store_name || 'LA DELICIA'}"></div>
-          <div class="form-group"><label>Eslogan</label><input name="tagline" value="${storeConfig.tagline || 'Panadería Artesanal'}"></div>
+          <div class="form-group"><label>Eslogan</label><input name="tagline" value="${storeConfig.tagline || 'Panificadora La Delicia - Los Mejores de la Ciudad'}"></div>
           <div class="form-group"><label>Historia</label><textarea name="story">${storeConfig.story || ''}</textarea></div>
           <div class="form-group"><label>Misión</label><textarea name="mission">${storeConfig.mission || ''}</textarea></div>
           <div class="form-group"><label>Visión</label><textarea name="vision">${storeConfig.vision || ''}</textarea></div>
