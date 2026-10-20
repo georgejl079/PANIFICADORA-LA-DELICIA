@@ -1406,10 +1406,6 @@ body.product-open .wa-float-wrap {
 <main id="view-home" class="view active">
   <div class="hero-carousel" id="hero-carousel"></div>
   <div class="section-title">
-    <div><h2>Promociones</h2><span>Ofertas de la semana</span></div>
-  </div>
-  <div class="promo-scroll" id="home-promos"></div>
-  <div class="section-title">
     <div><h2>Categorías</h2><span>Ver catálogo</span></div>
     <button type="button" class="link-btn" onclick="App.go('shop')">Ver catálogo</button>
   </div>
@@ -2139,12 +2135,6 @@ const App = {
   },
 
   renderHome() {
-    document.getElementById('home-promos').innerHTML = this.data.promotions.map((pr, idx) =>
-      `<article class="promo-card" onclick="App.openPromoModal(${idx});">
-        <button type="button" class="card-float-share" onclick="event.stopPropagation(); App.sharePromo(${idx})" aria-label="Compartir promoción"><i class="fas fa-share-alt"></i></button>
-        <img src="${pr.image}" alt=""><div class="promo-body"><span class="badge">${pr.badge}</span><strong>${pr.title}</strong><p>${pr.sub}</p></div>
-      </article>`
-    ).join('');
     document.getElementById('home-cats').innerHTML = this.data.categories.map(c =>
       `<article class="cat-card" onclick="App.filter('${c.id}'); App.go('shop');">
         <img src="${c.image}" alt="${c.name}"><span>${c.name}</span>
